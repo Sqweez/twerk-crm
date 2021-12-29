@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\ClientController;
+use App\Http\Controllers\api\SettingsController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -28,4 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('clients/today', [ClientController::class, 'outdatedToday']);
     Route::resource('clients', ClientController::class);
     Route::resource('users', UserController::class);
+    Route::get('settings', [SettingsController::class, 'getSettings']);
+    Route::get('settings/{key}', [SettingsController::class, 'getSettingsByKey']);
+    Route::post('settings', [SettingsController::class, 'setSettings']);
 });

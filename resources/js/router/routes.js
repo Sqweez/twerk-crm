@@ -2,6 +2,7 @@ import Dashboard from "@/views/Dashboard/Dashboard";
 import Login from "@/views/Login/Login";
 import ClientsIndex from "../views/Clients/ClientsIndex";
 import UsersIndex from "../views/Users/UsersIndex";
+import Settings from "../views/Settings/Settings";
 
 const routes = [
     {
@@ -15,6 +16,10 @@ const routes = [
     {
         path: '/admins',
         component: UsersIndex,
+    },
+    {
+        path: '/settings',
+        component: Settings,
     },
     {
         path: '/login',

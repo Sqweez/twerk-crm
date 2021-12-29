@@ -94,9 +94,12 @@
 
 <script>
 
+import axiosClient from "../../utils/axiosClient";
+
 export default {
     data: () => ({
         items: ['Сегодня', 'Текущая неделя', 'Текущий месяц', 'Последние 3 месяца'],
+        whatsappTemplate: '',
     }),
     components: {},
     computed: {
@@ -115,13 +118,14 @@ export default {
         await this.$store.dispatch('getNearlyClients');
         await this.$store.dispatch('getOutdatedClients');
         await this.$store.dispatch('getTodayClients');
+        const { data } = await axiosClient.get('settings/whatsapp_message');
+        this.whatsappTemplate = data.data.setting;
         this.$loading.disable();
     },
     methods: {
         sendMessage(client) {
-            const message = `Добрый день, ${client.client_name}! Напоминаем, что сегодня у вас истекает срок действия абонемента!`;
-            const url = `https://api.whatsapp.com/send?phone=${client.phone}&text=${message}`;
-            window.location.href = url;
+            const message = this.whatsappTemplate.replace('%ИМЯ%', client.client_name);
+            window.location.href = `https://api.whatsapp.com/send?phone=${client.phone}&text=${message}`;
         }
     },
 }

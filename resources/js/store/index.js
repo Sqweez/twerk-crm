@@ -24,6 +24,11 @@ const store = new Store({
                 url: '/admins',
                 icon: 'person'
             },
+            {
+                title: 'Настройки',
+                url: '/settings',
+                icon: 'dashboard'
+            },
         ]),
     },
     mutations: {
