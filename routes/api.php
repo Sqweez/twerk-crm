@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'getMe']);
     Route::get('clients/nearly', [ClientController::class, 'nearlyOutdatedClients']);
     Route::get('clients/outdated', [ClientController::class, 'outdatedClients']);
+    Route::get('clients/today', [ClientController::class, 'outdatedToday']);
     Route::resource('clients', ClientController::class);
     Route::resource('users', UserController::class);
 });

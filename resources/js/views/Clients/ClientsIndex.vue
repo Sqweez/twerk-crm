@@ -130,6 +130,11 @@ export default {
                 sortable: true,
             },
             {
+                value: 'purchase_date_format',
+                text: 'Дата покупки абонемента',
+                sortable: true,
+            },
+            {
                 value: 'user.name',
                 text: 'Последний редактор',
                 sortable: true,

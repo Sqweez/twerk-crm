@@ -6,12 +6,14 @@ export default {
         clients: [],
         nearlyClients: [],
         outdatedClients: [],
+        todayClients: [],
     },
     getters: {
         clients: s => s.clients,
         client: s => id => s.clients.find(c => c.id === id),
         nearlyClients: s => s.nearlyClients,
         outdatedClients: s => s.outdatedClients,
+        todayClients: s => s.todayClients,
     },
     mutations: {
         setClients(state, p) {
@@ -36,6 +38,9 @@ export default {
         },
         setOutdatedClients(state, p) {
             state.outdatedClients = p;
+        },
+        setTodayClients(s, p) {
+            s.todayClients = p;
         }
     },
     actions: {
@@ -70,6 +75,10 @@ export default {
         async getOutdatedClients({ commit }) {
             const { data } = await axiosClient.get('/clients/outdated');
             commit('setOutdatedClients', data.data);
+        },
+        async getTodayClients({ commit }) {
+            const { data } = await axiosClient.get('/clients/today');
+            commit('setTodayClients', data.data);
         }
     }
 }

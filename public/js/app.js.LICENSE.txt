@@ -3191,3 +3191,7 @@
  * @copyright 2015 Google, Inc.
  * @link https://github.com/google/material-design-lite
  */
+
+//! moment.js
+
+//! moment.js locale configuration

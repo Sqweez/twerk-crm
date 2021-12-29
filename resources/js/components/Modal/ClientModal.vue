@@ -36,7 +36,22 @@
                             label="Дата истечения абонемента"
                         >
                         </v-text-field>
-                        <v-btn text @click="client.pass_expired_at = null;" class="ml-4">
+                        <v-btn text @click="clearPassExpired" class="ml-4">
+                            Очистить дату
+                        </v-btn>
+                    </div>
+                    <div class="d-flex align-center">
+                        <v-text-field
+                            style="max-width: 200px;"
+                            v-model="client.purchase_date"
+                            type="date"
+                            label="Дата покупки абонемента"
+                        >
+                        </v-text-field>
+                        <v-btn text class="ml-4" @click="setToday(123);">
+                            Сегодня
+                        </v-btn>
+                        <v-btn text @click="clearPurchaseDate" class="ml-4">
                             Очистить дату
                         </v-btn>
                     </div>
@@ -61,10 +76,14 @@
 </template>
 
 <script>
+import moment from 'moment';
 import InputMask from 'inputmask';
+
 export default {
     data: () => ({
-        client: {},
+        client: {
+            purchase_date: null,
+        },
         loading: false,
         photo: null,
     }),
@@ -76,6 +95,18 @@ export default {
         }
     },
     methods: {
+        setToday() {
+            this.client.purchase_date = moment().format('yyyy-MM-D');
+            this.$forceUpdate();
+        },
+        clearPurchaseDate() {
+            this.client.purchase_date = null;
+            this.$forceUpdate();
+        },
+        clearPassExpired() {
+            this.client.pass_expired_at = null;
+            this.$forceUpdate();
+        },
         async onSubmit() {
             this.loading = true;
             if(this.client.hasOwnProperty('id')) {

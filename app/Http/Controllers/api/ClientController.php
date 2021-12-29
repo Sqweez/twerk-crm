@@ -49,7 +49,7 @@ class ClientController extends Controller
     }
 
     public function update($id, Request $request) {
-        $data = $request->only(['name', 'surname', 'date', 'pass_expired_at']);
+        $data = $request->only(['name', 'surname', 'date', 'pass_expired_at', 'purchase_date']);
         $data['user_id'] = Auth::id();
         $client = Client::whereId($id)->update($data);
         return new ClientsResource(Client::find($id));
@@ -59,6 +59,14 @@ class ClientController extends Controller
         $clients = Client::query()
             ->whereDate('pass_expired_at', '<', now())
             ->orWhereNull('pass_expired_at')
+            ->with('user')
+            ->get();
+        return ClientsResource::collection($clients);
+    }
+
+    public function outdatedToday(): AnonymousResourceCollection {
+        $clients = Client::query()
+            ->whereDate('pass_expired_at', now())
             ->with('user')
             ->get();
         return ClientsResource::collection($clients);
