@@ -49,6 +49,9 @@
                                 <v-btn icon @click="confirmationModal = true; userId = item.id;">
                                     <v-icon>mdi-delete</v-icon>
                                 </v-btn>
+                                <v-btn icon @click="sendEmptyMessage(item)" color="success">
+                                    <v-icon>mdi-whatsapp</v-icon>
+                                </v-btn>
                             </template>
                             <template slot="footer.page-text" slot-scope="{pageStart, pageStop, itemsLength}">
                                 {{ pageStart }}-{{ pageStop }} из {{ itemsLength }}
@@ -98,6 +101,10 @@ export default {
             this.$toast.success('Клиент успешно удален из системы!');
             this.userId = null;
             this.confirmationModal = false;
+        },
+        async sendEmptyMessage (client) {
+            const message = '';
+            window.location.href = `https://api.whatsapp.com/send?phone=${client.phone}&text=${message}`;
         }
     },
     data: () => ({

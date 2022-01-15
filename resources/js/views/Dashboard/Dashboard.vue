@@ -2,103 +2,25 @@
     <div>
         <v-row>
             <v-col sm="12" md="6">
-                <v-card>
-                    <v-card-title>
-                        Клиенты с абонементом, истекающим сегодня
-                    </v-card-title>
-                    <v-card-text>
-                        <v-simple-table v-slot:default>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Имя</th>
-                                <th>Телефон</th>
-                                <th>Дата истечения</th>
-                                <th>Написать</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(client, key) of nearlyClients" :key="key">
-                                <td>{{ key + 1 }}</td>
-                                <td>{{ client.client_name }}</td>
-                                <td>{{ client.phone }}</td>
-                                <td>{{ client.expire_date }}</td>
-                                <td>
-                                    <v-btn text color="primary" @click="sendMessage(client)">
-                                        Отправить сообщение
-                                    </v-btn>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </v-simple-table>
-                    </v-card-text>
-                </v-card>
+                <dashboard-client-table
+                    title="Клиенты с абонементом, истекающим сегодня"
+                    :clients="todayClients"
+                    :on-send="sendMessage"
+                />
             </v-col>
             <v-col sm="12" md="6">
-                <v-card>
-                    <v-card-title>
-                        Клиенты с истекшим абонементом
-                    </v-card-title>
-                    <v-card-text>
-                        <v-simple-table v-slot:default>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Имя</th>
-                                <th>Телефон</th>
-                                <th>Дата истечения</th>
-                                <th>Написать</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(client, key) of outdatedClients" :key="key">
-                                <td>{{ key + 1 }}</td>
-                                <td>{{ client.client_name }}</td>
-                                <td>{{ client.phone }}</td>
-                                <td>{{ client.expire_date }}</td>
-                                <td>
-                                    <v-btn text color="primary" @click="sendEmptyMessage(client)">
-                                        Отправить сообщение
-                                    </v-btn>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </v-simple-table>
-                    </v-card-text>
-                </v-card>
+                <dashboard-client-table
+                    title="Клиенты с истекшим абонементом"
+                    :clients="outdatedClients"
+                    :on-send="sendEmptyMessage"
+                />
             </v-col>
             <v-col sm="12" md="6">
-                <v-card>
-                    <v-card-title>
-                        Клиенты с абонементом, истекающим в течении 3 дней
-                    </v-card-title>
-                    <v-card-text>
-                        <v-simple-table v-slot:default>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Имя</th>
-                                <th>Телефон</th>
-                                <th>Дата истечения</th>
-                                <th>Написать</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(client, key) of nearlyClients" :key="key">
-                                <td>{{ key + 1 }}</td>
-                                <td>{{ client.client_name }}</td>
-                                <td>{{ client.phone }}</td>
-                                <td>{{ client.expire_date }}</td>
-                                <td>
-                                    <v-btn text color="primary" @click="sendEmptyMessage(client)">
-                                        Отправить сообщение
-                                    </v-btn>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </v-simple-table>
-                    </v-card-text>
-                </v-card>
+                <dashboard-client-table
+                    title="Клиенты с абонементом, истекающим в течении 3 дней"
+                    :clients="nearlyClients"
+                    :on-send="sendEmptyMessage"
+                />
             </v-col>
         </v-row>
     </div>
@@ -107,13 +29,14 @@
 <script>
 
 import axiosClient from "../../utils/axiosClient";
+import DashboardClientTable from "../../components/Widgets/DashboardClientTable";
 
 export default {
     data: () => ({
         items: ['Сегодня', 'Текущая неделя', 'Текущий месяц', 'Последние 3 месяца'],
         whatsappTemplate: '',
     }),
-    components: {},
+    components: {DashboardClientTable},
     computed: {
         nearlyClients() {
             return this.$store.getters.nearlyClients;
