@@ -110,22 +110,55 @@ export default {
         async onSubmit() {
             this.loading = true;
             if(this.client.hasOwnProperty('id')) {
-                await this.editClient();
+                const client = await this.editClient();
+                if (!client) {
+                    this.loading = false;
+                    return;
+                }
             } else {
-                await this.createClient();
+                const client = await this.createClient();
+                if (!client) {
+                    this.loading = false;
+                    return;
+                }
             }
             this.$emit('cancel');
             this.loading = false;
         },
         async createClient() {
+            if (!this.client.name) {
+                this.$toast.error('Заполните поле имя!');
+                return false;
+            }
+            if (!this.client.surname) {
+                this.$toast.error('Заполните поле фамилия!');
+                return false;
+            }
+            if (!this.client.phone) {
+                this.$toast.error('Заполните поле телефон!');
+                return false;
+            }
             await this.$store.dispatch('createClient', this.client);
             this.$toast.success('Клиент успешно добавлен');
             return this.client;
         },
         async editClient() {
+            if (!this.client.name) {
+                this.$toast.error('Заполните поле имя!');
+                return false;
+            }
+            if (!this.client.surname) {
+                this.$toast.error('Заполните поле фамилия!');
+                return false;
+            }
+            if (!this.client.phone) {
+                this.$toast.error('Заполните поле телефон!');
+                return false;
+            }
             await this.$store.dispatch('editClient', this.client);
             this.$toast.success('Клиент успешно отредактирован');
             this.$emit('cancel')
+            return true;
         },
         modifyPhone(phone) {
             return phone.replace(/[-()]/gi, '');

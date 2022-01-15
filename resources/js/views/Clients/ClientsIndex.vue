@@ -125,13 +125,13 @@ export default {
                 sortable: false,
             },
             {
-                value: 'expire_date',
-                text: 'Дата истечения абонемента',
+                value: 'purchase_date_format',
+                text: 'Дата покупки абонемента',
                 sortable: true,
             },
             {
-                value: 'purchase_date_format',
-                text: 'Дата покупки абонемента',
+                value: 'expire_date',
+                text: 'Дата истечения абонемента',
                 sortable: true,
             },
             {

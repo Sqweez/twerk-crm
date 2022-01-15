@@ -47,6 +47,7 @@
                                 <th>Имя</th>
                                 <th>Телефон</th>
                                 <th>Дата истечения</th>
+                                <th>Написать</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -55,6 +56,11 @@
                                 <td>{{ client.client_name }}</td>
                                 <td>{{ client.phone }}</td>
                                 <td>{{ client.expire_date }}</td>
+                                <td>
+                                    <v-btn text color="primary" @click="sendEmptyMessage(client)">
+                                        Отправить сообщение
+                                    </v-btn>
+                                </td>
                             </tr>
                             </tbody>
                         </v-simple-table>
@@ -74,6 +80,7 @@
                                 <th>Имя</th>
                                 <th>Телефон</th>
                                 <th>Дата истечения</th>
+                                <th>Написать</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -82,6 +89,11 @@
                                 <td>{{ client.client_name }}</td>
                                 <td>{{ client.phone }}</td>
                                 <td>{{ client.expire_date }}</td>
+                                <td>
+                                    <v-btn text color="primary" @click="sendEmptyMessage(client)">
+                                        Отправить сообщение
+                                    </v-btn>
+                                </td>
                             </tr>
                             </tbody>
                         </v-simple-table>
@@ -125,6 +137,10 @@ export default {
     methods: {
         sendMessage(client) {
             const message = this.whatsappTemplate.replace('%ИМЯ%', client.client_name);
+            window.location.href = `https://api.whatsapp.com/send?phone=${client.phone}&text=${message}`;
+        },
+        sendEmptyMessage (client) {
+            const message = '';
             window.location.href = `https://api.whatsapp.com/send?phone=${client.phone}&text=${message}`;
         }
     },
