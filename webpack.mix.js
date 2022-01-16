@@ -14,6 +14,7 @@ const config = require('./webpack.config');
 mix.js('resources/js/app.js', 'public/js')
     .vue()
     .webpackConfig(config)
+    .version()
     .sass('resources/sass/app.scss', 'public/css');
 
 mix.override(config => {
