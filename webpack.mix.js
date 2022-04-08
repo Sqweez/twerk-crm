@@ -12,7 +12,7 @@ const config = require('./webpack.config');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .sourceMaps(true, 'source-maps')
+    .sourceMaps(true)
     .vue()
     .webpackConfig(config)
     .version()
