@@ -14,6 +14,12 @@
 
     import MainTemplate from './templates/MainTemplate';
     import LoginTemplate from './templates/LoginTemplate';
+    import "./scripts/d3.min"
+    import "./scripts/getmdl-select.min"
+    import "./scripts/material.min"
+    import "./scripts/nv.d3.min"
+    import "./scripts/layout/layout.min"
+    import "./scripts/scroll/scroll.min"
 
     export default {
         components: {
