@@ -20,13 +20,16 @@
             MainTemplate, LoginTemplate
         },
         computed: {
-            isLoggedIn() {
+            isLoggedIn () {
                 return this.$store.getters.LOGGED_IN;
             },
-            loginChecked() {
+            loginChecked () {
                 return this.$store.getters.LOGIN_CHECKED;
             },
             layout() {
+                if (!this.loginChecked) {
+                    return 'EmptyLayout';
+                }
                 if (this.loginChecked && !this.isLoggedIn) {
                     return 'LoginTemplate';
                 }
