@@ -34,7 +34,6 @@ export default {
             try {
                 const response = await axiosClient.get('/me');
                 commit('setUser', response.data);
-                commit('setAuthChecked', true);
             } catch (e) {
                 console.log(e);
             } finally {
