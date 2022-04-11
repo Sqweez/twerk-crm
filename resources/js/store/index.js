@@ -40,8 +40,6 @@ const store = new Store({
         },
     },
     actions: {
-        async INIT({commit, dispatch}) {
-        },
     },
     modules: {
         authModule,

@@ -27,9 +27,6 @@
                 return this.$store.getters.LOGIN_CHECKED;
             },
             layout() {
-                if (!this.loginChecked) {
-                    return 'LoginTemplate';
-                }
                 if (this.loginChecked && !this.isLoggedIn) {
                     return 'LoginTemplate';
                 }

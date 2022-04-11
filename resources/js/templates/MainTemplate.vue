@@ -32,7 +32,7 @@
 
         },
         async created() {
-            await this.$store.dispatch('INIT');
+            // await this.$store.dispatch('INIT');
         },
         watch: {
         },
