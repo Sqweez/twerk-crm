@@ -28,7 +28,7 @@
             },
             layout() {
                 if (!this.loginChecked) {
-                    return '';
+                    return 'LoginTemplate';
                 }
                 if (this.loginChecked && !this.isLoggedIn) {
                     return 'LoginTemplate';
