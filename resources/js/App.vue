@@ -33,6 +33,9 @@
                 return this.$store.getters.LOGIN_CHECKED;
             },
             layout() {
+                if (localStorage.getItem('token')) {
+                    return 'MainTemplate';
+                }
                 if (!this.loginChecked) {
                     return 'EmptyLayout';
                 }
