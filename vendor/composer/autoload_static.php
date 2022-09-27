@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3c253628391988cfe62535215ce9113b
+class ComposerStaticInit6eb70a71d5f48f31751a2d92e42c3fc2
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -16,9 +16,9 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
@@ -367,8 +367,8 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -601,6 +601,7 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\VueController' => __DIR__ . '/../..' . '/app/Http/Controllers/VueController.php',
         'App\\Http\\Controllers\\api\\ClientController' => __DIR__ . '/../..' . '/app/Http/Controllers/api/ClientController.php',
+        'App\\Http\\Controllers\\api\\SaleController' => __DIR__ . '/../..' . '/app/Http/Controllers/api/SaleController.php',
         'App\\Http\\Controllers\\api\\SettingsController' => __DIR__ . '/../..' . '/app/Http/Controllers/api/SettingsController.php',
         'App\\Http\\Controllers\\api\\SubscriptionController' => __DIR__ . '/../..' . '/app/Http/Controllers/api/SubscriptionController.php',
         'App\\Http\\Controllers\\api\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/api/UserController.php',
@@ -615,9 +616,11 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Requests\\Client\\CreateClientRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Client/CreateClientRequest.php',
         'App\\Http\\Requests\\Client\\UpdateClientRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Client/UpdateClientRequest.php',
+        'App\\Http\\Requests\\Sale\\CreateSaleRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Sale/CreateSaleRequest.php',
         'App\\Http\\Requests\\Subscription\\CreateSubscriptionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Subscription/CreateSubscriptionRequest.php',
         'App\\Http\\Requests\\Subscription\\UpdateSubscriptionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Subscription/UpdateSubscriptionRequest.php',
         'App\\Http\\Resources\\Clients\\ClientsResource' => __DIR__ . '/../..' . '/app/Http/Resources/Clients/ClientsResource.php',
+        'App\\Http\\Resources\\Clients\\SingleClientResource' => __DIR__ . '/../..' . '/app/Http/Resources/Clients/SingleClientResource.php',
         'App\\Http\\Resources\\Subscription\\SubscriptionResource' => __DIR__ . '/../..' . '/app/Http/Resources/Subscription/SubscriptionResource.php',
         'App\\Http\\Resources\\Users\\AuthUserResource' => __DIR__ . '/../..' . '/app/Http/Resources/Users/AuthUserResource.php',
         'App\\Http\\Resources\\Users\\UsersResource' => __DIR__ . '/../..' . '/app/Http/Resources/Users/UsersResource.php',
@@ -5338,8 +5341,6 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
         'Spatie\\MediaLibrary\\Support\\UrlGenerator\\DefaultUrlGenerator' => __DIR__ . '/..' . '/spatie/laravel-medialibrary/src/Support/UrlGenerator/DefaultUrlGenerator.php',
         'Spatie\\MediaLibrary\\Support\\UrlGenerator\\UrlGenerator' => __DIR__ . '/..' . '/spatie/laravel-medialibrary/src/Support/UrlGenerator/UrlGenerator.php',
         'Spatie\\MediaLibrary\\Support\\UrlGenerator\\UrlGeneratorFactory' => __DIR__ . '/..' . '/spatie/laravel-medialibrary/src/Support/UrlGenerator/UrlGeneratorFactory.php',
-        'Spatie\\TemporaryDirectory\\Exceptions\\InvalidDirectoryName' => __DIR__ . '/..' . '/spatie/temporary-directory/src/Exceptions/InvalidDirectoryName.php',
-        'Spatie\\TemporaryDirectory\\Exceptions\\PathAlreadyExists' => __DIR__ . '/..' . '/spatie/temporary-directory/src/Exceptions/PathAlreadyExists.php',
         'Spatie\\TemporaryDirectory\\TemporaryDirectory' => __DIR__ . '/..' . '/spatie/temporary-directory/src/TemporaryDirectory.php',
         'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
         'Symfony\\Component\\Console\\Application' => __DIR__ . '/..' . '/symfony/console/Application.php',
@@ -5945,6 +5946,7 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
         'Symfony\\Component\\String\\Slugger\\AsciiSlugger' => __DIR__ . '/..' . '/symfony/string/Slugger/AsciiSlugger.php',
         'Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
         'Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
+        'Symfony\\Component\\Translation\\CatalogueMetadataAwareInterface' => __DIR__ . '/..' . '/symfony/translation/CatalogueMetadataAwareInterface.php',
         'Symfony\\Component\\Translation\\Catalogue\\AbstractOperation' => __DIR__ . '/..' . '/symfony/translation/Catalogue/AbstractOperation.php',
         'Symfony\\Component\\Translation\\Catalogue\\MergeOperation' => __DIR__ . '/..' . '/symfony/translation/Catalogue/MergeOperation.php',
         'Symfony\\Component\\Translation\\Catalogue\\OperationInterface' => __DIR__ . '/..' . '/symfony/translation/Catalogue/OperationInterface.php',
@@ -6006,6 +6008,7 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
         'Symfony\\Component\\Translation\\Loader\\QtFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/QtFileLoader.php',
         'Symfony\\Component\\Translation\\Loader\\XliffFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/XliffFileLoader.php',
         'Symfony\\Component\\Translation\\Loader\\YamlFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/YamlFileLoader.php',
+        'Symfony\\Component\\Translation\\LocaleSwitcher' => __DIR__ . '/..' . '/symfony/translation/LocaleSwitcher.php',
         'Symfony\\Component\\Translation\\LoggingTranslator' => __DIR__ . '/..' . '/symfony/translation/LoggingTranslator.php',
         'Symfony\\Component\\Translation\\MessageCatalogue' => __DIR__ . '/..' . '/symfony/translation/MessageCatalogue.php',
         'Symfony\\Component\\Translation\\MessageCatalogueInterface' => __DIR__ . '/..' . '/symfony/translation/MessageCatalogueInterface.php',
@@ -6106,7 +6109,6 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
         'Symfony\\Contracts\\Service\\ServiceSubscriberTrait' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberTrait.php',
         'Symfony\\Contracts\\Service\\Test\\ServiceLocatorTest' => __DIR__ . '/..' . '/symfony/service-contracts/Test/ServiceLocatorTest.php',
         'Symfony\\Contracts\\Translation\\LocaleAwareInterface' => __DIR__ . '/..' . '/symfony/translation-contracts/LocaleAwareInterface.php',
-        'Symfony\\Contracts\\Translation\\Test\\TranslatorTest' => __DIR__ . '/..' . '/symfony/translation-contracts/Test/TranslatorTest.php',
         'Symfony\\Contracts\\Translation\\TranslatableInterface' => __DIR__ . '/..' . '/symfony/translation-contracts/TranslatableInterface.php',
         'Symfony\\Contracts\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/translation-contracts/TranslatorInterface.php',
         'Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/translation-contracts/TranslatorTrait.php',
@@ -6242,10 +6244,10 @@ class ComposerStaticInit3c253628391988cfe62535215ce9113b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3c253628391988cfe62535215ce9113b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3c253628391988cfe62535215ce9113b::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit3c253628391988cfe62535215ce9113b::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit3c253628391988cfe62535215ce9113b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6eb70a71d5f48f31751a2d92e42c3fc2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6eb70a71d5f48f31751a2d92e42c3fc2::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit6eb70a71d5f48f31751a2d92e42c3fc2::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit6eb70a71d5f48f31751a2d92e42c3fc2::$classMap;
 
         }, null, ClassLoader::class);
     }
