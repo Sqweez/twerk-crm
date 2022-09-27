@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\api\ClientController;
+use App\Http\Controllers\api\SaleController;
 use App\Http\Controllers\api\SettingsController;
+use App\Http\Controllers\api\SubscriptionController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -24,12 +26,11 @@ Route::get('clients/cron/expired', [ClientController::class, 'cronExpiredClients
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'getMe']);
-    Route::get('clients/nearly', [ClientController::class, 'nearlyOutdatedClients']);
-    Route::get('clients/outdated', [ClientController::class, 'outdatedClients']);
-    Route::get('clients/today', [ClientController::class, 'outdatedToday']);
-    Route::resource('clients', ClientController::class);
-    Route::resource('users', UserController::class);
-    Route::get('settings', [SettingsController::class, 'getSettings']);
-    Route::get('settings/{key}', [SettingsController::class, 'getSettingsByKey']);
-    Route::post('settings', [SettingsController::class, 'setSettings']);
+    Route::apiResource('clients', ClientController::class);
+    Route::get('users/roles', [UserController::class, 'getRoles']);
+    Route::apiResource('users', UserController::class);
+    Route::get('subscriptions/types', [SubscriptionController::class, 'getSubscriptionTypes']);
+    Route::apiResource('subscriptions', SubscriptionController::class);
+    Route::get('sales/payment-types', [SaleController::class, 'getPaymentTypes']);
+    Route::post('sales', [SaleController::class, 'store']);
 });

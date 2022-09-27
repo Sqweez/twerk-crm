@@ -1,167 +1,136 @@
 <template>
-    <v-dialog
-        persistent
-        max-width="1000"
-        v-model="state"
-    >
-        <v-card>
-            <v-card-title class="headline d-flex justify-space-between">
-                <span class="white--text">{{ id === null ? 'Создать' : 'Редактировать' }} клиента:</span>
-                <v-btn icon text class="float-right">
-                    <v-icon color="white" @click="$emit('cancel')">
-                        mdi-close
-                    </v-icon>
-                </v-btn>
-            </v-card-title>
-            <v-card-text>
-                <v-form>
-                    <v-text-field
-                        label="Имя"
-                        v-model="client.name"
-                    />
-                    <v-text-field
-                        label="Фамилия"
-                        v-model="client.surname"
-                    />
-                    <v-text-field
-                        id="client_phone"
-                        label="Телефон"
-                        v-model="client.phone"
-                    />
-                    <div class="d-flex align-center">
-                        <v-text-field
-                            style="max-width: 200px;"
-                            v-model="client.pass_expired_at"
-                            type="date"
-                            label="Дата истечения абонемента"
-                        >
-                        </v-text-field>
-                        <v-btn text @click="clearPassExpired" class="ml-4">
-                            Очистить дату
-                        </v-btn>
-                    </div>
-                    <div class="d-flex align-center">
-                        <v-text-field
-                            style="max-width: 200px;"
-                            v-model="client.purchase_date"
-                            type="date"
-                            label="Дата покупки абонемента"
-                        >
-                        </v-text-field>
-                        <v-btn text class="ml-4" @click="setToday(123);">
-                            Сегодня
-                        </v-btn>
-                        <v-btn text @click="clearPurchaseDate" class="ml-4">
-                            Очистить дату
-                        </v-btn>
-                    </div>
-
-                </v-form>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn text @click="$emit('cancel')">Отмена</v-btn>
-                <v-spacer></v-spacer>
-                <v-progress-circular
-                    v-if="loading"
-                    indeterminate
-                    color="primary"
-                ></v-progress-circular>
-                <v-btn text color="success" @click="onSubmit" v-else>
-                    {{ id === null ? 'Создать' : 'Редактировать' }} клиента
-                    <v-icon>mdi-check</v-icon>
-                </v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+   <base-modal
+       :state="state"
+       max-width="700"
+       persistent
+       @cancel="$emit('cancel')"
+       :title="id ? 'Редактирование клиента' : 'Создание клиента'"
+   >
+       <template #default>
+           <v-form>
+               <v-text-field
+                   label="Имя"
+                   v-model="client.name"
+               />
+               <v-text-field
+                   label="Телефон"
+                   v-model="client.phone"
+                   id="phone_input"
+               />
+               <div v-if="avatarPreview" class="d-flex mt-2 mb-4">
+                   <div style="width: 200px; height: 200px;">
+                       <img :src="avatarPreview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;" alt="Аватар">
+                   </div>
+                   <v-btn icon color="error" class="ml-3" @click="onAvatarDelete">
+                       <v-icon>mdi-close</v-icon>
+                   </v-btn>
+               </div>
+               <input type="file" accept="image/*" ref="fileInput" @change="onFileInputChange" class="d-none">
+               <v-btn color="primary" @click="$refs.fileInput.click()">
+                   Загрузить фото <v-icon>mdi-upload</v-icon>
+               </v-btn>
+           </v-form>
+       </template>
+       <template #actions>
+           <v-btn text @click="$emit('cancel')">
+               Отмена
+           </v-btn>
+           <v-spacer />
+           <v-btn text color="success" @click="onSubmit">
+               Сохранить <v-icon>mdi-check</v-icon>
+           </v-btn>
+       </template>
+   </base-modal>
 </template>
 
 <script>
 import moment from 'moment';
 import InputMask from 'inputmask';
+import {createObjectURL, deepClone, toFormData} from '@/utils/helpers';
 
 export default {
     data: () => ({
         client: {
-            purchase_date: null,
+            name: '',
+            phone: '',
+            avatar: null,
         },
+        avatarPreview: null,
         loading: false,
         photo: null,
     }),
     mounted() {
-        const phoneInput = document.getElementById('client_phone');
-        if (phoneInput) {
-            const inputMask = new InputMask("+7(999)999-99-99");
-            inputMask.mask(phoneInput);
-        }
+
     },
     methods: {
-        setToday() {
-            this.client.purchase_date = moment().format('yyyy-MM-D');
-            this.$forceUpdate();
-        },
-        clearPurchaseDate() {
-            this.client.purchase_date = null;
-            this.$forceUpdate();
-        },
-        clearPassExpired() {
-            this.client.pass_expired_at = null;
-            this.$forceUpdate();
+        appendMask () {
+            const phoneInput = document.getElementById('phone_input');
+            console.log(phoneInput);
+            if (phoneInput) {
+                const inputMask = new InputMask("+7(999)999-99-99");
+                inputMask.mask(phoneInput);
+            }
         },
         async onSubmit() {
             this.loading = true;
             if(this.client.hasOwnProperty('id')) {
-                const client = await this.editClient();
-                if (!client) {
-                    this.loading = false;
-                    return;
-                }
+                await this.editClient();
             } else {
-                const client = await this.createClient();
-                if (!client) {
-                    this.loading = false;
-                    return;
-                }
+                await this.createClient();
             }
-            this.$emit('cancel');
-            this.loading = false;
         },
         async createClient() {
             if (!this.client.name) {
                 this.$toast.error('Заполните поле имя!');
                 return false;
             }
-            if (!this.client.surname) {
-                this.$toast.error('Заполните поле фамилия!');
-                return false;
-            }
             if (!this.client.phone) {
                 this.$toast.error('Заполните поле телефон!');
                 return false;
             }
-            await this.$store.dispatch('createClient', this.client);
-            this.$toast.success('Клиент успешно добавлен');
-            return this.client;
+            if (!this.client.avatar) {
+                delete this.client.avatar;
+            }
+            try {
+                await this.$store.dispatch('createClient', toFormData(this.client));
+                this.$toast.success('Клиент успешно добавлен');
+                this.$emit('cancel');
+            } catch (e) {
+                this.$toast.error('Произошла ошибка!');
+            }
         },
         async editClient() {
             if (!this.client.name) {
                 this.$toast.error('Заполните поле имя!');
                 return false;
             }
-            if (!this.client.surname) {
-                this.$toast.error('Заполните поле фамилия!');
-                return false;
-            }
             if (!this.client.phone) {
                 this.$toast.error('Заполните поле телефон!');
                 return false;
             }
-            await this.$store.dispatch('editClient', this.client);
-            this.$toast.success('Клиент успешно отредактирован');
-            this.$emit('cancel')
-            return true;
+
+            if (this.client.avatar === this.avatarPreview || !this.client.avatar) {
+                delete this.client.avatar;
+            }
+
+            try {
+                await this.$store.dispatch('editClient', { payload: toFormData(this.client), id: this.client.id });
+                this.$toast.success('Клиент успешно отредактирован');
+                this.$emit('cancel');
+            } catch (e) {
+                this.$toast.error('Произошла ошибка!');
+            }
         },
-        modifyPhone(phone) {
-            return phone.replace(/[-()]/gi, '');
+        onFileInputChange (e) {
+            const file = e.target.files[0];
+            if (!file) { return; }
+            this.client.avatar = file;
+            this.avatarPreview = createObjectURL(file);
+            this.$refs.fileInput.value = null;
+        },
+        onAvatarDelete () {
+            this.client.avatar = null;
+            this.avatarPreview = null;
         },
     },
     props: {
@@ -175,18 +144,24 @@ export default {
         }
     },
     watch: {
-        state() {
-            this.client = {};
+        state(value) {
+            this.client = {
+                name: '',
+                phone: '',
+                avatar: null,
+            };
+
+            this.avatarPreview = null;
+
             if (this.id) {
-                this.client = JSON.parse(JSON.stringify(this.$store.getters.client(this.id)));
+                this.client = deepClone(this.$store.getters.client(this.id));
+                if (this.client.avatar) {
+                    this.avatarPreview = this.client.avatar;
+                }
             }
-            if (this.state === true) {
+            if (value) {
                 setTimeout(() => {
-                    const phoneInput = document.getElementById('client_phone');
-                    if (phoneInput) {
-                        const inputMask = new InputMask("+7(999)999-99-99");
-                        inputMask.mask(phoneInput);
-                    }
+                    this.appendMask();
                 }, 500);
             }
 

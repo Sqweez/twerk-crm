@@ -15,26 +15,27 @@
     import Drawer from "../components/Navigation/Drawer";
     import Header from "../components/Header/Header";
     import LoadingSpinner from "../components/Loaders/LoadingSpinner";
-    import {mapGetters} from "vuex";
+    import "./../scripts/d3.min"
+    import "./../scripts/getmdl-select.min"
+    import "./../scripts/material.min"
+    import "./../scripts/nv.d3.min"
+    import "./../scripts/layout/layout.min"
+    import "./../scripts/scroll/scroll.min"
+
     export default {
         components: {
             LoadingSpinner,
             Drawer, Header
         },
-        methods: {
-
-        },
-        async created() {
-            // await this.$store.dispatch('INIT');
-        },
-        watch: {
-        },
         computed: {
-
-        }
+            loginChecked () {
+                return this.$store.getters.LOGIN_CHECKED;
+            },
+        },
     }
 </script>
 
 <style scoped>
+@import "./../css/application.min.css";
 
 </style>

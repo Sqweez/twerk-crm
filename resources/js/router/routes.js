@@ -2,7 +2,10 @@ import Dashboard from "@/views/Dashboard/Dashboard";
 import Login from "@/views/Login/Login";
 import ClientsIndex from "../views/Clients/ClientsIndex";
 import UsersIndex from "../views/Users/UsersIndex";
-import Settings from "../views/Settings/Settings";
+import SubscriptionIndex from '@/views/Subscriptions/SubscriptionIndex';
+import SubscriptionCreate from '@/views/Subscriptions/SubscriptionCreate';
+import SubscriptionEdit from '@/views/Subscriptions/SubscriptionEdit';
+import ClientView from '@/views/Clients/ClientView';
 
 const routes = [
     {
@@ -14,13 +17,29 @@ const routes = [
         component: ClientsIndex,
     },
     {
-        path: '/admins',
+        path: '/clients/:id',
+        component: ClientView,
+    },
+    {
+        path: '/users',
         component: UsersIndex,
     },
     {
+        path: '/subscriptions',
+        component: SubscriptionIndex,
+    },
+    {
+        path: '/subscriptions/create',
+        component: SubscriptionCreate,
+    },
+    {
+        path: '/subscriptions/:id',
+        component: SubscriptionEdit,
+    },
+    /*{
         path: '/settings',
         component: Settings,
-    },
+    },*/
     {
         path: '/login',
         name: 'Login',

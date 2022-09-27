@@ -3,82 +3,59 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Client\CreateClientRequest;
+use App\Http\Requests\Client\UpdateClientRequest;
 use App\Http\Resources\Clients\ClientsResource;
-use App\Http\Services\TelegramService;
+use App\Http\Resources\Clients\SingleClientResource;
 use App\Models\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class ClientController extends Controller
 {
     public function index(): AnonymousResourceCollection {
-        return ClientsResource::collection(Client::with('user')->get());
+        return ClientsResource::collection(
+            Client::query()->get()
+        );
     }
 
     /**
-     * @throws GuzzleException
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function cronExpiredClients(TelegramService $service) {
-        $clients = Client::query()
-            ->where('pass_expired_at', '=', now()->toDateString())
-            ->get();
-        $message = $this->getMessage($clients);
-        return $service->sendMessage($message);
-    }
-
-    private function getMessage($clients): string {
-        if ($clients->count() === 0) {
-            return "Сегодня нет клиентов с истекающим абонементом";
-        }
-        $message = "Клиенты с истекающим абонементом \n";
-        $clients->each(function ($client, $key) use (&$message) {
-            $message .= sprintf("%s. %s - %s", ($key + 1), $client->fullname, $client->phone);
-            $message .= "\n";
-        });
-        return urlencode($message);
-    }
-
-    public function store(Request $request): ClientsResource {
-        $data = $request->all();
-        $data['date'] = $data['date'] ?? null;
-        $data['user_id'] = Auth::id();
+    public function store(CreateClientRequest $request) {
+        $data = $request->validated();
+        /* @var Client $client */
         $client = Client::create($data);
-        return new ClientsResource($client);
+        if (isset($data['avatar'])) {
+            $client->addMedia($data['avatar'])
+                ->preservingOriginal()
+                ->toMediaCollection();
+        }
+        return ClientsResource::make($client);
     }
 
-    public function update($id, Request $request) {
-        $data = $request->only(['name', 'surname', 'date', 'pass_expired_at', 'purchase_date']);
-        $data['user_id'] = Auth::id();
-        $client = Client::whereId($id)->update($data);
-        return new ClientsResource(Client::find($id));
+    public function show(Client $client) {
+        return SingleClientResource::make($client);
     }
 
-    public function outdatedClients(): AnonymousResourceCollection {
-        $clients = Client::query()
-            ->whereDate('pass_expired_at', '<', now())
-            ->orWhereNull('pass_expired_at')
-            ->with('user')
-            ->get();
-        return ClientsResource::collection($clients);
-    }
-
-    public function outdatedToday(): AnonymousResourceCollection {
-        $clients = Client::query()
-            ->whereDate('pass_expired_at', now())
-            ->with('user')
-            ->get();
-        return ClientsResource::collection($clients);
-    }
-
-    public function nearlyOutdatedClients(): AnonymousResourceCollection {
-        $clients = Client::query()
-            ->whereDate('pass_expired_at', '<=', now()->addDays(3))
-            ->whereDate('pass_expired_at', '>=', now())
-            ->with('user')
-            ->get();
-        return ClientsResource::collection($clients);
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    public function update(UpdateClientRequest $request, Client $client): ClientsResource {
+        $data = $request->validated();
+        $client->update($data);
+        if (Arr::has($data, 'avatar')) {
+            $client->clearMediaCollection();
+            $client->addMedia($data['avatar'])
+                ->preservingOriginal()
+                ->toMediaCollection();
+        }
+        $client->fresh();
+        return ClientsResource::make($client);
     }
 
     public function destroy($id) {

@@ -1,5 +1,5 @@
 <template>
-    <v-overlay :value="isLoading">
+    <v-overlay :value="IS_LOADING_STATE">
         <v-progress-circular
             indeterminate
             size="64"
@@ -11,11 +11,6 @@
     export default {
         data: () => ({}),
         methods: {},
-        computed: {
-            isLoading() {
-                return this.$store.getters.IS_LOADING;
-            }
-        }
     }
 </script>
 

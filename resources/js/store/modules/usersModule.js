@@ -3,44 +3,54 @@ import axiosClient from "../../utils/axiosClient";
 export default {
     state: {
         users: [],
+        roles: [],
     },
     getters: {
-        users: s => s.users,
-        user: s => id => s.users.find(u => u.id === id)
+        users: state => state.users,
+        user: state => id => state.users.find(u => u.id === id),
+        roles: state => state.roles,
+        trainers: state => state.users.filter(u => u.is_trainer),
     },
     mutations: {
-        setUsers(s, p) {
-            s.users = p;
+        setUsers(state, payload) {
+            state.users = payload;
         },
-        createUser(s, p) {
-            s.users.push(p);
+        createUser(state, payload) {
+            state.users.push(payload);
         },
-        editUser(s, p) {
-            s.users = s.users.map(u => {
-                if (u.id === p.id) {
-                    u = {...p};
+        editUser(state, payload) {
+            state.users = state.users.map(u => {
+                if (u.id === payload.id) {
+                    u = {...payload};
                 }
                 return u;
             })
         },
-        deleteUser(s, id) {
-            s.users = s.users.filter(u => u.id !== id);
+        deleteUser(state, id) {
+            state.users = state.users.filter(u => u.id !== id);
+        },
+        setRoles (state, payload) {
+            state.roles = payload;
         }
     },
     actions: {
-        async getUsers({commit}) {
-            const { data } = await axiosClient.get('/users');
-            commit('setUsers', data.data);
+        async getRoles ({ commit }) {
+            const { data: { data } } = await axiosClient.get('/users/roles');
+            commit('setRoles', data);
         },
-        async createUser({commit}, p) {
-            const { data } = await axiosClient.post('/users', p);
-            commit('createUser', data);
+        async getUsers ({ commit }) {
+            const { data: { data } } = await axiosClient.get('/users');
+            commit('setUsers', data);
         },
-        async editUser({commit}, p) {
-            const { data } = await axiosClient.patch(`/users/${p.id}`, p);
-            commit('editUser', data);
+        async createUser ({ commit }, payload) {
+            const { data } = await axiosClient.post('/users', payload);
+            commit('createUser', data.data);
         },
-        async deleteUser({commit}, id) {
+        async editUser ({ commit }, payload) {
+            const { data } = await axiosClient.patch(`/users/${payload.id}`, payload);
+            commit('editUser', data.data);
+        },
+        async deleteUser ({ commit }, id) {
             await axiosClient.delete(`/users/${id}`);
             commit('deleteUser', id);
         }

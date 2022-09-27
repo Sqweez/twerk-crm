@@ -2,82 +2,63 @@
     <v-card>
         <v-card-title>Список клиентов</v-card-title>
         <v-card-text>
-            <v-container>
-                <div class="d-flex justify-space-between align-center">
-                    <v-btn color="error" @click="clientModal = true">Добавить клиента <v-icon>mdi-plus</v-icon></v-btn>
-                </div>
-                <v-row>
-                    <v-col>
-                        <v-text-field
-                            class="mt-2"
-                            v-model="search"
-                            solo
-                            clearable
-                            label="Поиск клиента"
-                            single-line
-                            hide-details
-                        ></v-text-field>
-                        <v-data-table
-                            loading-text="Идет загрузка клиентов"
-                            :search="search"
-                            no-results-text="Нет результатов"
-                            no-data-text="Нет данных"
-                            :headers="headers"
-                            :page.sync="pagination.page"
-                            :items="clients"
-                            @page-count="pageCount = $event"
-                            :items-per-page="10"
-                            :footer-props="{
-                            'items-per-page-options': [10, 15, {text: 'Все', value: -1}],
-                            'items-per-page-text': 'Записей на странице',
-                        }">
-                            <template v-slot:item.client_balance="{item}">
-                                {{ item.client_balance }} ₸
-                            </template>
-                            <template v-slot:item.client_discount="{item}">
-                                {{ item.client_discount }}%
-                            </template>
-                            <template v-slot:item.is_partner="{item}">
-                                <v-icon :color="item.is_partner ? 'success' : 'error'">
-                                    {{ item.is_partner ? 'mdi-check' : 'mdi-close' }}
-                                </v-icon>
-                            </template>
-                            <template v-slot:item.actions="{ item }">
-                                <v-btn icon @click="userId = item.id; clientModal = true;">
-                                    <v-icon>mdi-pencil</v-icon>
-                                </v-btn>
-                                <v-btn icon @click="confirmationModal = true; userId = item.id;">
-                                    <v-icon>mdi-delete</v-icon>
-                                </v-btn>
-                                <v-btn icon @click="sendEmptyMessage(item)" color="success">
-                                    <v-icon>mdi-whatsapp</v-icon>
-                                </v-btn>
-                            </template>
-                            <template slot="footer.page-text" slot-scope="{pageStart, pageStop, itemsLength}">
-                                {{ pageStart }}-{{ pageStop }} из {{ itemsLength }}
-                            </template>
-                        </v-data-table>
-                        <div class="text-xs-center pt-2">
-                            <v-pagination
-                                v-model="pagination.page"
-                                :total-visible="10"
-                                :length="pageCount"></v-pagination>
+            <div class="d-flex justify-space-between align-center">
+                <v-btn color="error" @click="clientModal = true">Добавить клиента
+                    <v-icon>mdi-plus</v-icon>
+                </v-btn>
+            </div>
+            <v-text-field
+                class="mt-2"
+                v-model="search"
+                solo
+                clearable
+                label="Поиск клиента"
+                single-line
+                hide-details
+            ></v-text-field>
+            <v-data-table
+                :search="search"
+                :headers="headers"
+                :page.sync="pagination.page"
+                :items="clients"
+                @page-count="pageCount = $event"
+                :items-per-page="10"
+            >
+                <template v-slot:item.avatar="{item}">
+                    <div v-if="item.avatar" class="d-flex mt-2 mb-4">
+                        <div style="width: 200px; height: 200px;">
+                            <img :src="item.avatar"
+                                 style="width: 100%; height: 100%; object-fit: cover; object-position: top;"
+                                 alt="Аватар">
                         </div>
-                    </v-col>
-                </v-row>
-            </v-container>
+                    </div>
+                </template>
+                <template v-slot:item.actions="{ item }">
+                    <v-btn icon @click="clientId = item.id; clientModal = true;">
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn icon @click="confirmationModal = true; clientId = item.id;">
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                    <v-btn icon @click="$router.push(`/clients/${item.id}`)">
+                        <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                </template>
+                <template slot="footer.page-text" slot-scope="{pageStart, pageStop, itemsLength}">
+                    {{ pageStart }}-{{ pageStop }} из {{ itemsLength }}
+                </template>
+            </v-data-table>
         </v-card-text>
         <ClientModal
             :state="clientModal"
-            :id="userId"
-            v-on:cancel="userId = null; clientModal = false;"
-            v-on:clientCreated="userId = null; clientModal = false;"
+            :id="clientId"
+            @cancel="clientId = null; clientModal = false;"
         />
         <ConfirmationModal
             :state="confirmationModal"
             :on-confirm="deleteUser"
-            v-on:cancel="userId = null; confirmationModal = false"
-            message="Вы действительно хотите удалить выбранного клиента?" />
+            @cancel="clientId = null; confirmationModal = false"
+            message="Вы действительно хотите удалить выбранного клиента?"/>
     </v-card>
 </template>
 
@@ -96,22 +77,18 @@ export default {
     methods: {
         async deleteUser() {
             this.$loading.enable();
-            await this.$store.dispatch('deleteClient', this.userId);
+            await this.$store.dispatch('deleteClient', this.clientId);
             this.$loading.disable();
             this.$toast.success('Клиент успешно удален из системы!');
             this.userId = null;
             this.confirmationModal = false;
         },
-        async sendEmptyMessage (client) {
-            const message = '';
-            window.location.href = `https://api.whatsapp.com/send?phone=${client.phone}&text=${message}`;
-        }
     },
     data: () => ({
         exportModal: false,
         confirmationModal: false,
         clientModal: false,
-        userId: null,
+        clientId: null,
         balanceModal: false,
         search: '',
         pagination: {
@@ -122,7 +99,7 @@ export default {
         pageCount: 1,
         headers: [
             {
-                value: 'client_name',
+                value: 'name',
                 text: 'Имя',
                 sortable: false
             },
@@ -131,21 +108,11 @@ export default {
                 text: 'Телефон',
                 sortable: false,
             },
-            {
-                value: 'purchase_date_format',
-                text: 'Дата покупки абонемента',
-                sortable: true,
-            },
-            {
-                value: 'expire_date',
-                text: 'Дата истечения абонемента',
-                sortable: true,
-            },
-            {
-                value: 'user.name',
-                text: 'Последний редактор',
-                sortable: true,
-            },
+           /* {
+                value: 'avatar',
+                text: 'Фото',
+                sortable: false,
+            },*/
             {
                 value: 'actions',
                 text: 'Действие'

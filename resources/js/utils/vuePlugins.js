@@ -16,7 +16,7 @@ export default {
                 $loading() {
                     return new LoadingService(store)
                 },
-                $color() {
+                $color () {
                     return new ColorService();
                 },
                 IS_LOADING() {
@@ -24,6 +24,12 @@ export default {
                 },
                 $auth() {
                     return this.$store.getters.USER;
+                },
+                IS_LOADING_STATE () {
+                    return this.IS_LOADING;
+                },
+                IS_SUPERUSER () {
+                    return this.$store.getters.USER && this.$store.getters.USER.is_super_user;
                 }
             }
         })

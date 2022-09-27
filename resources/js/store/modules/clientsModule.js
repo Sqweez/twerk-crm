@@ -4,9 +4,7 @@ import axios from "axios";
 export default {
     state: {
         clients: [],
-        nearlyClients: [],
-        outdatedClients: [],
-        todayClients: [],
+        client: null,
     },
     getters: {
         clients: s => s.clients,
@@ -14,6 +12,7 @@ export default {
         nearlyClients: s => s.nearlyClients,
         outdatedClients: s => s.outdatedClients,
         todayClients: s => s.todayClients,
+        singleClient: s => s.client,
     },
     mutations: {
         setClients(state, p) {
@@ -41,44 +40,47 @@ export default {
         },
         setTodayClients(s, p) {
             s.todayClients = p;
+        },
+        setClient (state, client) {
+            state.client = client;
         }
     },
     actions: {
         async getClients({commit}) {
-            commit('enableLoading');
             const r = await axiosClient.get('/clients');
             commit('setClients', r.data.data);
-            commit('disableLoading');
         },
-        async createClient({commit}, p) {
-            commit('enableLoading');
-            const r = await axiosClient.post('/clients', p);
-            commit('createClient', r.data.data);
-            commit('disableLoading');
+        async createClient({commit}, payload) {
+            try {
+                this.$loading.enable();
+                const { data: { data } } = await axiosClient.post('/clients', payload);
+                commit('createClient', data);
+            } catch (e) {
+                throw e;
+            }
+            finally {
+                this.$loading.disable();
+            }
         },
-        async editClient({commit}, p) {
-            commit('enableLoading');
-            const r = await axiosClient.patch(`/clients/${p.id}`, p);
-            commit('editClient', r.data.data);
-            commit('disableLoading');
+        async editClient({commit}, { payload, id }) {
+            try {
+                this.$loading.enable();
+                const { data: { data } } = await axiosClient.post(`/clients/${id}?_method=PATCH`, payload);
+                commit('editClient', data);
+            } catch (e) {
+                throw e;
+            }
+            finally {
+                this.$loading.disable();
+            }
         },
         async deleteClient({commit}, id) {
-            commit('enableLoading');
             await axiosClient.delete(`/clients/${id}`);
             commit('deleteClient', id);
-            commit('disableLoading');
         },
-        async getNearlyClients({ commit }) {
-            const { data } = await axiosClient.get('/clients/nearly');
-            commit('setNearlyClients', data.data);
-        },
-        async getOutdatedClients({ commit }) {
-            const { data } = await axiosClient.get('/clients/outdated');
-            commit('setOutdatedClients', data.data);
-        },
-        async getTodayClients({ commit }) {
-            const { data } = await axiosClient.get('/clients/today');
-            commit('setTodayClients', data.data);
+        async getClient ({ commit }, id) {
+            const { data: { data } } = await axiosClient.get(`/clients/${id}`);
+            commit('setClient', data);
         }
     }
 }

@@ -1,60 +1,60 @@
 <template>
-    <v-dialog
+    <base-modal
         persistent
         max-width="1000"
-        v-model="state"
+        :state="state"
+        :title="id === null ? 'Создать пользователя' : 'Редактировать пользователя'"
+        @cancel="$emit('cancel')"
     >
-        <v-card>
-            <v-card-title class="headline d-flex justify-space-between">
-                <span class="white--text">{{ id === null ? 'Создать' : 'Редактировать' }} админа:</span>
-                <v-btn icon text class="float-right">
-                    <v-icon color="white" @click="$emit('cancel')">
-                        mdi-close
-                    </v-icon>
-                </v-btn>
-            </v-card-title>
-            <v-card-text>
-                <v-form>
-                    <v-text-field
-                        label="Имя"
-                        v-model="user.name"
-                    />
-                    <v-text-field
-                        label="Логин"
-                        v-model="user.login"
-                    />
-                    <v-text-field
-                        label="Пароль"
-                        v-model="user.password"
-                    />
-                    <p v-if="id">
-                        Если пароль не нужно менять оставьте это поле пустым
-                    </p>
-                </v-form>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn text @click="$emit('cancel')">Отмена</v-btn>
-                <v-spacer></v-spacer>
-                <v-progress-circular
-                    v-if="loading"
-                    indeterminate
-                    color="primary"
-                ></v-progress-circular>
-                <v-btn text color="success" @click="onSubmit" v-else>
-                    {{ id === null ? 'Создать' : 'Редактировать' }} пользователя
-                    <v-icon>mdi-check</v-icon>
-                </v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+        <template #default>
+            <v-form>
+                <v-text-field
+                    label="Имя"
+                    v-model="user.name"
+                />
+                <v-text-field
+                    label="Логин"
+                    v-model="user.login"
+                />
+                <v-text-field
+                    label="Пароль"
+                    v-model="user.password"
+                    :hint="id ? 'Если пароль не нужно менять оставьте это поле пустым' : ''"
+                    persistent-hint
+                />
+                <v-autocomplete
+                    v-model="user.roles"
+                    :items="roles"
+                    item-text="name"
+                    item-value="id"
+                    multiple
+                    label="Роль"
+                />
+            </v-form>
+        </template>
+        <template #actions>
+            <v-btn text @click="$emit('cancel')">Отмена</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn text color="success" @click="onSubmit">
+                Сохранить
+                <v-icon>mdi-check</v-icon>
+            </v-btn>
+        </template>
+    </base-modal>
 </template>
 
 <script>
+import {deepClone} from '@/utils/helpers';
+
 export default {
     data: () => ({
         user: {},
-        loading: false,
     }),
+    computed: {
+        roles () {
+            return this.$store.getters.roles;
+        },
+    },
     methods: {
         async onSubmit() {
             this.loading = true;
@@ -63,18 +63,59 @@ export default {
             } else {
                 await this.createUser();
             }
-            this.$emit('cancel');
-            this.loading = false;
         },
         async createUser() {
-            await this.$store.dispatch('createUser', this.user);
-            this.$toast.success('Админ успешно добавлен');
-            return this.client;
+            if (!this.user.name) {
+                this.$toast.error('Заполните поле имя!');
+                return false;
+            }
+            if (!this.user.password) {
+                this.$toast.error('Заполните поле пароль!');
+                return false;
+            }
+            if (!this.user.login) {
+                this.$toast.error('Заполните поле логин!');
+                return false;
+            }
+            if (!this.user.roles.length) {
+                this.$toast.error('Заполните поле роль!');
+                return false;
+            }
+            try {
+                this.$loading.enable();
+                await this.$store.dispatch('createUser', this.user);
+                this.$toast.success('Пользователь успешно добавлен');
+                this.$emit('cancel');
+            } catch (e) {
+                this.$toast.error('Произошла ошибка');
+            } finally {
+                this.$loading.disable();
+            }
         },
         async editUser() {
-            await this.$store.dispatch('editUser', this.user);
-            this.$toast.success('Админ успешно отредактирован');
-            this.$emit('cancel')
+            if (!this.user.name) {
+                this.$toast.error('Заполните поле имя!');
+                return false;
+            }
+            if (!this.user.login) {
+                this.$toast.error('Заполните поле логин!');
+                return false;
+            }
+            if (!this.user.roles.length) {
+                this.$toast.error('Заполните поле роль!');
+                return false;
+            }
+            try {
+                this.$loading.enable();
+                await this.$store.dispatch('editUser', this.user);
+                this.$toast.success('Админ успешно отредактирован');
+                this.$emit('cancel')
+            } catch (e) {
+                this.$toast.error('Произошла ошибка');
+            } finally {
+                this.$loading.disable();
+            }
+
         },
     },
     props: {
@@ -91,7 +132,8 @@ export default {
         state() {
             this.client = {};
             if (this.id) {
-                this.user = JSON.parse(JSON.stringify(this.$store.getters.user(this.id)));
+                this.user = deepClone(this.$store.getters.user(this.id));
+                this.user.roles = this.user.roles.map(r => r.id);
             }
         },
     },

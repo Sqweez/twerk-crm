@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Users\AuthUserResource;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
@@ -21,8 +22,8 @@ class AuthController extends Controller
         return 'login';
     }
 
-    public function getMe(): ?Authenticatable {
-        return Auth::user();
+    public function getMe(): AuthUserResource {
+        return AuthUserResource::make(Auth::user());
     }
 
     public function login(Request $request) {

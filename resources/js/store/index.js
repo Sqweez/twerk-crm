@@ -1,13 +1,19 @@
 import Vue from 'vue'
 import Vuex, {Store} from "vuex"
 Vue.use(Vuex);
-import axiosClient from "../utils/axiosClient";
 import clientsModule from "./modules/clientsModule";
 import usersModule from "./modules/usersModule";
 import authModule from "./modules/authModule";
+import subscriptionModule from "./modules/subscriptionModule";
+import saleModule from "./modules/saleModule";
+import VuexPlugins from '@/store/plugins/vuexPlugins';
 
 const store = new Store({
+    state: {
+        is_loading: false,
+    },
     getters: {
+        IS_LOADING: s => s.is_loading,
         navigations: s =>  ([
             {
                 title: 'Главная страница',
@@ -20,15 +26,20 @@ const store = new Store({
                 icon: 'person'
             },
             {
-                title: 'Админы',
-                url: '/admins',
+                title: 'Пользователи',
+                url: '/users',
                 icon: 'person'
             },
             {
+                title: 'Абонементы',
+                url: '/subscriptions',
+                icon: 'list'
+            },
+           /* {
                 title: 'Настройки',
                 url: '/settings',
                 icon: 'dashboard'
-            },
+            },*/
         ]),
     },
     mutations: {
@@ -40,12 +51,22 @@ const store = new Store({
         },
     },
     actions: {
+        async INIT ({ dispatch }) {
+            await Promise.all([
+                dispatch('getSubscriptionTypes'),
+                dispatch('getRoles'),
+                dispatch('getPaymentTypes')
+            ]);
+        }
     },
     modules: {
         authModule,
         clientsModule,
-        usersModule
+        usersModule,
+        subscriptionModule,
+        saleModule
     },
+    plugins: [VuexPlugins]
 });
 
 

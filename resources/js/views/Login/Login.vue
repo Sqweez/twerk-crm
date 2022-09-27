@@ -7,7 +7,7 @@
                     dark
                     flat
                 >
-                    <v-toolbar-title>CRM | Вход</v-toolbar-title>
+                    <v-toolbar-title>Kaif | Вход</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
                     <v-form>

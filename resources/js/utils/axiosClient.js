@@ -6,7 +6,8 @@ axiosClient.interceptors.request.use((config) => {
     config.baseURL = '/api/';
     if (token) {
         config.headers = {
-            Authorization: 'Bearer ' + token
+            Authorization: 'Bearer ' + token,
+            Accept: 'application/json'
         };
     }
     return config;

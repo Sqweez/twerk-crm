@@ -2,20 +2,22 @@ import axiosClient from "../../utils/axiosClient";
 
 export default {
     state: {
-        is_loading: false,
         user: null,
         is_auth_checked: false,
         token: null,
     },
     getters: {
-        IS_LOADING: s => s.is_loading,
         LOGIN_CHECKED: s => s.is_auth_checked,
         USER: s => s.user,
         LOGGED_IN: s => !!s.user
     },
     mutations: {
         setToken(state, token) {
-            localStorage.setItem('token', token);
+            if (token) {
+                localStorage.setItem('token', token);
+            } else {
+                localStorage.removeItem('token');
+            }
             state.token = token;
         },
         setAuthChecked(state) {
@@ -29,16 +31,16 @@ export default {
         async LOGOUT() {
             localStorage.removeItem('token');
         },
-        async AUTH({commit}) {
-            commit('enableLoading');
+        async AUTH({commit, dispatch}) {
             try {
-                const response = await axiosClient.get('/me');
-                commit('setUser', response.data);
+                const { data: { data } } = await axiosClient.get('/me');
+                commit('setUser', data);
+                dispatch('INIT');
             } catch (e) {
-                console.log(e);
+                commit('setUser', null);
+                commit('setToken', null);
             } finally {
                 commit('setAuthChecked');
-                commit('disableLoading');
             }
         },
         async LOGIN({commit, dispatch}, payload) {
