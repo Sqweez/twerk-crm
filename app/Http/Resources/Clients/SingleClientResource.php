@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Clients;
 
+use App\Http\Resources\Client\ClientPurchasedServices;
 use App\Models\Client;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,6 +23,7 @@ class SingleClientResource extends JsonResource
             'name' => $this->name,
             'phone' => $this->phone,
             'avatar' => $this->getFirstMediaUrl(),
+            'sales' => ClientPurchasedServices::collection($this->sales),
         ];
     }
 }

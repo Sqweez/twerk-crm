@@ -58,7 +58,8 @@
             :state="confirmationModal"
             :on-confirm="deleteUser"
             @cancel="clientId = null; confirmationModal = false"
-            message="Вы действительно хотите удалить выбранного клиента?"/>
+            message="Вы действительно хотите удалить выбранного клиента?"
+        />
     </v-card>
 </template>
 

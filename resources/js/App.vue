@@ -2,7 +2,7 @@
     <v-app>
         <div>
             <main-template v-show="layout === 'MainTemplate'"/>
-            <login-template v-show="layout === 'LoginTemplate'"/>
+            <login-template v-if="layout === 'LoginTemplate'"/>
             <default-template v-if="layout === 'DefaultTemplate'"/>
             <div v-if="!loginChecked" class="fullscreen-overlay">
                 <v-progress-circular indeterminate color="red" size="60"></v-progress-circular>

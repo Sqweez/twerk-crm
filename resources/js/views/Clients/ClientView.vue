@@ -1,10 +1,11 @@
 <template>
-    <div v-if="isClientReady">
+    <div v-show="isClientReady">
         <v-row>
             <v-col cols="2">
-                <i-card-page no-title>
+                <i-card-page no-title v-if="isClientReady">
                     <div class="d-flex flex-column">
-                        <div v-if="client.avatar" style="width: 150px; height: 150px; overflow: hidden; margin: 0 auto;">
+                        <div v-if="client.avatar"
+                             style="width: 150px; height: 150px; overflow: hidden; margin: 0 auto;">
                             <img :src="client.avatar" alt="" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div style="">
@@ -35,19 +36,9 @@
                 </i-card-page>
             </v-col>
             <v-col cols="10">
-                <i-card-page title="Рабочее пространство">
-                    <v-expansion-panels>
-                        <v-expansion-panel
-                        >
-                            <v-expansion-panel-header color="blue darken-3">
-                                Купленные абонементы
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                                @TODO
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-                    <client-price-list />
+                <i-card-page title="Рабочее пространство" v-if="isClientReady">
+                    <client-purchased-subscriptions />
+                    <client-price-list/>
                 </i-card-page>
             </v-col>
         </v-row>
@@ -57,24 +48,31 @@
 <script>
 import {mapGetters} from 'vuex';
 import ClientPriceList from '@/components/Client/ClientPriceList';
+import ClientPurchasedSubscriptions from '@/components/Client/ClientPurchasedSubscriptions';
 
 export default {
-    components: {ClientPriceList},
+    components: {ClientPurchasedSubscriptions, ClientPriceList},
     data: () => ({}),
     computed: {
         ...mapGetters({
             client: 'singleClient',
         }),
-        isClientReady () {
+        isClientReady() {
             return this.client && this.client?.id == this.$route.params.id;
         }
     },
-    methods: {},
-    async mounted() {
+    methods: {
+        async getClientData() {
+            await Promise.all([
+                this.$store.dispatch('getClient', this.$route.params.id),
+                this.$store.dispatch('getSubscriptions'),
+                this.$store.dispatch('getUsers')
+            ])
+        },
+    },
+    async created() {
         this.$loading.enable();
-        await this.$store.dispatch('getClient', this.$route.params.id);
-        await this.$store.dispatch('getSubscriptions');
-        await this.$store.dispatch('getUsers');
+        await this.getClientData();
         this.$loading.disable();
     }
 }

@@ -6,6 +6,7 @@ import usersModule from "./modules/usersModule";
 import authModule from "./modules/authModule";
 import subscriptionModule from "./modules/subscriptionModule";
 import saleModule from "./modules/saleModule";
+import reportsModule from "./modules/reportsModule";
 import VuexPlugins from '@/store/plugins/vuexPlugins';
 
 const store = new Store({
@@ -33,6 +34,11 @@ const store = new Store({
             {
                 title: 'Абонементы',
                 url: '/subscriptions',
+                icon: 'list'
+            },
+            {
+                title: 'Статистика',
+                url: '/economy',
                 icon: 'list'
             },
            /* {
@@ -64,7 +70,8 @@ const store = new Store({
         clientsModule,
         usersModule,
         subscriptionModule,
-        saleModule
+        saleModule,
+        reportsModule
     },
     plugins: [VuexPlugins]
 });

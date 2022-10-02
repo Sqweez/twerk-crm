@@ -367,8 +367,8 @@ class ComposerStaticInitd073b9958730bead56bddf9ae2a59e12
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -619,6 +619,7 @@ class ComposerStaticInitd073b9958730bead56bddf9ae2a59e12
         'App\\Http\\Requests\\Sale\\CreateSaleRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Sale/CreateSaleRequest.php',
         'App\\Http\\Requests\\Subscription\\CreateSubscriptionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Subscription/CreateSubscriptionRequest.php',
         'App\\Http\\Requests\\Subscription\\UpdateSubscriptionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Subscription/UpdateSubscriptionRequest.php',
+        'App\\Http\\Resources\\Client\\ClientPurchasedServices' => __DIR__ . '/../..' . '/app/Http/Resources/Client/ClientPurchasedServices.php',
         'App\\Http\\Resources\\Clients\\ClientsResource' => __DIR__ . '/../..' . '/app/Http/Resources/Clients/ClientsResource.php',
         'App\\Http\\Resources\\Clients\\SingleClientResource' => __DIR__ . '/../..' . '/app/Http/Resources/Clients/SingleClientResource.php',
         'App\\Http\\Resources\\Subscription\\SubscriptionResource' => __DIR__ . '/../..' . '/app/Http/Resources/Subscription/SubscriptionResource.php',
@@ -631,6 +632,7 @@ class ComposerStaticInitd073b9958730bead56bddf9ae2a59e12
         'App\\Models\\Subscription' => __DIR__ . '/../..' . '/app/Models/Subscription.php',
         'App\\Models\\SubscriptionType' => __DIR__ . '/../..' . '/app/Models/SubscriptionType.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Models\\Visit' => __DIR__ . '/../..' . '/app/Models/Visit.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',

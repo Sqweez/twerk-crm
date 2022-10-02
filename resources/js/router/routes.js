@@ -6,6 +6,7 @@ import SubscriptionIndex from '@/views/Subscriptions/SubscriptionIndex';
 import SubscriptionCreate from '@/views/Subscriptions/SubscriptionCreate';
 import SubscriptionEdit from '@/views/Subscriptions/SubscriptionEdit';
 import ClientView from '@/views/Clients/ClientView';
+import StatsPageIndex from '@/views/Stats/StatsPageIndex';
 
 const routes = [
     {
@@ -35,6 +36,10 @@ const routes = [
     {
         path: '/subscriptions/:id',
         component: SubscriptionEdit,
+    },
+    {
+        path: '/economy',
+        component: StatsPageIndex
     },
     /*{
         path: '/settings',

@@ -38,6 +38,10 @@ class ClientController extends Controller
     }
 
     public function show(Client $client) {
+        $client->load('sales');
+        $client->load('sales.subscription');
+        $client->load('sales.subscription.type');
+        $client->load('sales.visits');
         return SingleClientResource::make($client);
     }
 

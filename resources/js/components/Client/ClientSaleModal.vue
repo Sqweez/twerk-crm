@@ -69,6 +69,7 @@ export default {
                 this.$loading.enable();
                 await this.$createSale(payload);
                 this.$toast.success('Продажа успешно совершена!');
+                this.$emit('cancel');
             } catch (e) {
                 console.log(e);
             } finally {

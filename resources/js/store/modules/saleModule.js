@@ -10,7 +10,7 @@ export default {
     mutations: {
         setPaymentTypes (state, types) {
             state.payment_types = types;
-        }
+        },
     },
     actions: {
         async getPaymentTypes ({ commit }) {
@@ -20,6 +20,6 @@ export default {
         async createSale ({ commit }, payload) {
             const { data: { data } } = await axiosClient.post('/sales', payload);
             commit('setClient', data);
-        }
+        },
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\ClientController;
+use App\Http\Controllers\api\EconomyController;
 use App\Http\Controllers\api\SaleController;
 use App\Http\Controllers\api\SettingsController;
 use App\Http\Controllers\api\SubscriptionController;
@@ -32,5 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('subscriptions/types', [SubscriptionController::class, 'getSubscriptionTypes']);
     Route::apiResource('subscriptions', SubscriptionController::class);
     Route::get('sales/payment-types', [SaleController::class, 'getPaymentTypes']);
+    Route::post('sales/{sale}/activate', [SaleController::class, 'activateSale']);
+    Route::post('sales/{sale}/visit', [SaleController::class, 'createVisit']);
     Route::post('sales', [SaleController::class, 'store']);
+    Route::get('economy', [EconomyController::class, 'index']);
 });

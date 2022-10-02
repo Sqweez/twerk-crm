@@ -43,7 +43,19 @@ export default {
         },
         setClient (state, client) {
             state.client = client;
-        }
+        },
+        activateSale (state, payload) {
+            console.log(state.client);
+            state.client = {
+                ...state.client,
+                sales: state.client.sales.map(s => {
+                    if (payload.id === s.id) {
+                        s = payload;
+                    }
+                    return s;
+                })
+            }
+        },
     },
     actions: {
         async getClients({commit}) {
@@ -81,6 +93,14 @@ export default {
         async getClient ({ commit }, id) {
             const { data: { data } } = await axiosClient.get(`/clients/${id}`);
             commit('setClient', data);
-        }
+        },
+        async activateSale ({ commit }, payload) {
+            const {data: { data }} = await axiosClient.post(`/sales/${payload.id}/activate`);
+            commit('activateSale', data);
+        },
+        async createVisit ({ commit }, payload) {
+            const {data: { data }} = await axiosClient.post(`/sales/${payload.sale_id}/visit`, payload);
+            commit('activateSale', data);
+        },
     }
 }
