@@ -26,7 +26,8 @@ class CreateClientRequest extends FormRequest
         return [
             'name' => 'required|string',
             'phone' => 'required|string',
-            'avatar' => 'file'
+            'avatar' => 'file',
+            'pass' => 'required|string'
         ];
     }
 }

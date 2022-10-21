@@ -26,7 +26,8 @@ class UpdateClientRequest extends FormRequest
         return [
             'name' => 'required|string',
             'phone' => 'required|string',
-            'avatar' => 'sometimes|file'
+            'avatar' => 'sometimes|file',
+            'pass' => 'required|string'
         ];
     }
 }

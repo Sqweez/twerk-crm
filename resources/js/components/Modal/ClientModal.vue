@@ -17,6 +17,10 @@
                    v-model="client.phone"
                    id="phone_input"
                />
+               <v-text-field
+                   label="Карта"
+                   v-model="client.pass"
+               />
                <div v-if="avatarPreview" class="d-flex mt-2 mb-4">
                    <div style="width: 200px; height: 200px;">
                        <img :src="avatarPreview" style="width: 100%; height: 100%; object-fit: cover; object-position: top;" alt="Аватар">
@@ -54,6 +58,7 @@ export default {
             name: '',
             phone: '',
             avatar: null,
+            pass: '',
         },
         avatarPreview: null,
         loading: false,
@@ -88,6 +93,12 @@ export default {
                 this.$toast.error('Заполните поле телефон!');
                 return false;
             }
+
+            if (!this.client.pass) {
+                this.$toast.error('Заполните поле карта!');
+                return false;
+            }
+
             if (!this.client.avatar) {
                 delete this.client.avatar;
             }
@@ -106,6 +117,11 @@ export default {
             }
             if (!this.client.phone) {
                 this.$toast.error('Заполните поле телефон!');
+                return false;
+            }
+
+            if (!this.client.pass) {
+                this.$toast.error('Заполните поле карта!');
                 return false;
             }
 

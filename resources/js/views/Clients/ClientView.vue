@@ -30,6 +30,16 @@
                                         </v-list-item-subtitle>
                                     </v-list-item-content>
                                 </v-list-item>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            {{ client.pass }}
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle>
+                                            Номер карты
+                                        </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
                             </v-list>
                         </div>
                     </div>

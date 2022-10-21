@@ -23,6 +23,7 @@ class SingleClientResource extends JsonResource
             'name' => $this->name,
             'phone' => $this->phone,
             'avatar' => $this->getFirstMediaUrl(),
+            'pass' => $this->pass,
             'sales' => ClientPurchasedServices::collection($this->sales),
         ];
     }

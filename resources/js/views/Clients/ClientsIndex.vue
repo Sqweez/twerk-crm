@@ -109,6 +109,11 @@ export default {
                 text: 'Телефон',
                 sortable: false,
             },
+            {
+                value: 'pass',
+                text: 'Номер карты',
+                sortable: false,
+            },
            /* {
                 value: 'avatar',
                 text: 'Фото',

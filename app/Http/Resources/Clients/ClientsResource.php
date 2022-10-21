@@ -22,6 +22,7 @@ class ClientsResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'phone' => $this->phone,
+            'pass' => $this->pass,
             //'avatar' => $this->getFirstMediaUrl(),
         ];
     }
