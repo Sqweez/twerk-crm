@@ -17,6 +17,7 @@
                 </v-col>
                 <v-col cols="12" xl="3">
                     <v-select
+                        :disabled="!IS_SUPERUSER"
                         :items="dateFilters"
                         item-text="name"
                         item-value="value"

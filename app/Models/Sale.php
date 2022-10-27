@@ -74,7 +74,7 @@ class Sale extends Model
     }
 
     public function subscription(): BelongsTo {
-        return $this->belongsTo(Subscription::class);
+        return $this->belongsTo(Subscription::class)->withTrashed();
     }
 
     public function trainer(): BelongsTo {

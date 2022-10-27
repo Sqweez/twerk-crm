@@ -22,7 +22,9 @@
                 :page.sync="pagination.page"
                 :items="clients"
                 @page-count="pageCount = $event"
+                @current-items="getFilteredClients"
                 :items-per-page="10"
+                @click:row="$router.push(`/clients/${$event.id}`)"
             >
                 <template v-slot:item.avatar="{item}">
                     <div v-if="item.avatar" class="d-flex mt-2 mb-4">
@@ -84,6 +86,11 @@ export default {
             this.userId = null;
             this.confirmationModal = false;
         },
+        getFilteredClients (clients) {
+            if (clients.length === 1 && clients[0].pass === this.search) {
+                this.$router.push(`/clients/${clients[0].id}`)
+            }
+        },
     },
     data: () => ({
         exportModal: false,
@@ -119,10 +126,10 @@ export default {
                 text: 'Фото',
                 sortable: false,
             },*/
-            {
+          /*  {
                 value: 'actions',
                 text: 'Действие'
-            }
+            }*/
         ]
     }),
     computed: {

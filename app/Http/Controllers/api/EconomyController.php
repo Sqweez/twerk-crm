@@ -54,6 +54,13 @@ class EconomyController extends Controller
     }
 
     private function getTrainerVisits() {
-        return [];
+        $visits = Visit::query()
+            ->whereDate('created_at', '>=', $this->start)
+            ->whereDate('created_at', '<=', $this->finish)
+            ->with('subscription')
+            ->with('client')
+            ->with('trainer')
+            ->get();
+        /* */
     }
 }
