@@ -24,7 +24,7 @@
                 @page-count="pageCount = $event"
                 @current-items="getFilteredClients"
                 :items-per-page="10"
-                @click:row="$router.push(`/clients/${$event.id}`)"
+                @click:row="handleRowClick"
             >
                 <template v-slot:item.avatar="{item}">
                     <div v-if="item.avatar" class="d-flex mt-2 mb-4">
@@ -36,14 +36,11 @@
                     </div>
                 </template>
                 <template v-slot:item.actions="{ item }">
-                    <v-btn icon @click="clientId = item.id; clientModal = true;">
+                    <v-btn icon @click.prevent="clientId = item.id; clientModal = true;">
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn>
-                    <v-btn icon @click="confirmationModal = true; clientId = item.id;">
+                    <v-btn icon @click.pr.prevent="confirmationModal = true; clientId = item.id;">
                         <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                    <v-btn icon @click="$router.push(`/clients/${item.id}`)">
-                        <v-icon>mdi-eye</v-icon>
                     </v-btn>
                 </template>
                 <template slot="footer.page-text" slot-scope="{pageStart, pageStop, itemsLength}">
@@ -91,6 +88,11 @@ export default {
                 this.$router.push(`/clients/${clients[0].id}`)
             }
         },
+        handleRowClick (item) {
+            if (!(this.confirmationModal || this.clientModal)) {
+                this.$router.push(`/clients/${item.id}`)
+            }
+        }
     },
     data: () => ({
         exportModal: false,
@@ -126,10 +128,10 @@ export default {
                 text: 'Фото',
                 sortable: false,
             },*/
-          /*  {
+            {
                 value: 'actions',
                 text: 'Действие'
-            }*/
+            }
         ]
     }),
     computed: {
