@@ -44,7 +44,7 @@ export default {
         setClient (state, client) {
             state.client = client;
         },
-        activateSale (state, payload) {
+        updateSale (state, payload) {
             console.log(state.client);
             state.client = {
                 ...state.client,
@@ -55,6 +55,12 @@ export default {
                     return s;
                 })
             }
+        },
+        cancelSubscription (state, id) {
+            state.client = {
+                ...state.client,
+                sales: state.client.sales.filter(s => s.id !== id)
+            };
         },
     },
     actions: {
@@ -96,11 +102,19 @@ export default {
         },
         async activateSale ({ commit }, payload) {
             const {data: { data }} = await axiosClient.post(`/sales/${payload.id}/activate`);
-            commit('activateSale', data);
+            commit('updateSale', data);
+        },
+        async cancelSubscription ({ commit }, id) {
+            await axiosClient.get(`/sales/${id}/cancel`);
+            commit('cancelSubscription', id);
         },
         async createVisit ({ commit }, payload) {
-            const {data: { data }} = await axiosClient.post(`/sales/${payload.sale_id}/visit`, payload);
-            commit('activateSale', data);
+            const { data: { data } } = await axiosClient.post(`/sales/${payload.sale_id}/visit`, payload);
+            commit('updateSale', data);
         },
+        async updateSale ({ commit }, payload) {
+            const { data: { data } } = await axiosClient.patch(`/sales/${payload.id}/update`, payload);
+            commit('updateSale', data);
+        }
     }
 }

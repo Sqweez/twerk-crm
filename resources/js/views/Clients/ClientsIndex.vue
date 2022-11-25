@@ -7,6 +7,14 @@
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </div>
+            <v-alert
+                class="my-3"
+                color="indigo"
+                dark
+            >
+                Количество клиентов: {{ clientCount }}
+
+            </v-alert>
             <v-text-field
                 class="mt-2"
                 v-model="search"
@@ -20,7 +28,7 @@
                 :search="search"
                 :headers="headers"
                 :page.sync="pagination.page"
-                :items="clients"
+                :items="filteredClients"
                 @page-count="pageCount = $event"
                 @current-items="getFilteredClients"
                 :items-per-page="10"
@@ -39,7 +47,7 @@
                     <v-btn icon @click.prevent="clientId = item.id; clientModal = true;">
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn>
-                    <v-btn icon @click.pr.prevent="confirmationModal = true; clientId = item.id;">
+                    <v-btn icon @click.prevent="deleteClient(item.id, $event)">
                         <v-icon>mdi-delete</v-icon>
                     </v-btn>
                 </template>
@@ -52,12 +60,6 @@
             :state="clientModal"
             :id="clientId"
             @cancel="clientId = null; clientModal = false;"
-        />
-        <ConfirmationModal
-            :state="confirmationModal"
-            :on-confirm="deleteUser"
-            @cancel="clientId = null; confirmationModal = false"
-            message="Вы действительно хотите удалить выбранного клиента?"
         />
     </v-card>
 </template>
@@ -75,26 +77,32 @@ export default {
         await this.$store.dispatch('getClients');
     },
     methods: {
-        async deleteUser() {
-            this.$loading.enable();
-            await this.$store.dispatch('deleteClient', this.clientId);
-            this.$loading.disable();
-            this.$toast.success('Клиент успешно удален из системы!');
-            this.userId = null;
-            this.confirmationModal = false;
+        deleteClient(id, event) {
+            this.deletingClient = true;
+            this.$confirm('Вы действительно хотите удалить выбранного клиента?')
+                .then(async () => {
+                    this.$loading.enable();
+                    await this.$store.dispatch('deleteClient', id);
+                    this.$loading.disable();
+                    this.$toast.success('Клиент успешно удален из системы!');
+                })
+                .finally(() => {
+                    this.deletingClient = false;
+                });
         },
-        getFilteredClients (clients) {
+        getFilteredClients(clients) {
             if (clients.length === 1 && clients[0].pass === this.search) {
                 this.$router.push(`/clients/${clients[0].id}`)
             }
         },
-        handleRowClick (item) {
-            if (!(this.confirmationModal || this.clientModal)) {
+        handleRowClick(item) {
+            if (!(this.confirmationModal || this.clientModal || this.deletingClient)) {
                 this.$router.push(`/clients/${item.id}`)
             }
         }
     },
     data: () => ({
+        deletingClient: false,
         exportModal: false,
         confirmationModal: false,
         clientModal: false,
@@ -123,11 +131,11 @@ export default {
                 text: 'Номер карты',
                 sortable: false,
             },
-           /* {
-                value: 'avatar',
-                text: 'Фото',
-                sortable: false,
-            },*/
+            /* {
+                 value: 'avatar',
+                 text: 'Фото',
+                 sortable: false,
+             },*/
             {
                 value: 'actions',
                 text: 'Действие'
@@ -135,8 +143,14 @@ export default {
         ]
     }),
     computed: {
+        clientCount() {
+            return this.clients.length;
+        },
         clients() {
             return this.$store.getters.clients;
+        },
+        filteredClients() {
+            return this.clients;
         }
     }
 }

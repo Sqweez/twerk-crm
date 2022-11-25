@@ -24,3 +24,10 @@ export function toFormData (payload) {
     })
     return formData;
 }
+
+export function reverseDate (date) {
+    return date
+        .split('.')
+        .reverse()
+        .join('-');
+}

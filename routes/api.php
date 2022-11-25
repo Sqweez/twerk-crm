@@ -35,6 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('sales/payment-types', [SaleController::class, 'getPaymentTypes']);
     Route::post('sales/{sale}/activate', [SaleController::class, 'activateSale']);
     Route::post('sales/{sale}/visit', [SaleController::class, 'createVisit']);
+    Route::get('sales/{sale}/cancel', [SaleController::class, 'cancelSale']);
+    Route::patch('sales/{sale}/update', [SaleController::class, 'updateSale']);
     Route::post('sales', [SaleController::class, 'store']);
     Route::get('economy', [EconomyController::class, 'index']);
 });

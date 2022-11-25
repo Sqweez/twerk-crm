@@ -6,6 +6,7 @@ import store from "./store";
 import axios from 'axios';
 import './filters/filters';
 import loadingPlugin from "./utils/loadingPlugin";
+import confirmationPlugin from "./utils/confimationPlugin";
 axios.defaults.withCredentials = true;
 
 import vuePlugins from "@/utils/vuePlugins";
@@ -13,6 +14,7 @@ import GlobalComponents from '@/components/GlobalComponents';
 
 Vue.use(loadingPlugin);
 Vue.use(vuePlugins);
+Vue.use(confirmationPlugin);
 
 GlobalComponents.connect();
 Vue.config.productionTip = false;

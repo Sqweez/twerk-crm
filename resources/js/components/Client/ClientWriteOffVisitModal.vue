@@ -1,6 +1,7 @@
 <template>
     <base-modal
         :state="state"
+        :max-width="800"
         title="Списание посещения"
         @cancel="$emit('cancel')"
     >

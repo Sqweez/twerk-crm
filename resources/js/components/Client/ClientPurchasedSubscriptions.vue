@@ -57,16 +57,40 @@
                                         </v-list-item>
                                     </v-list>
                                     <div class="ml-12 pt-4">
-                                        <v-btn
-                                            color="success"
-                                            v-if="sale.is_activated && sale.is_active"
-                                            @click="currentSale = sale; clientWriteoffModalShow = true;"
-                                        >
-                                            Списать
-                                        </v-btn>
-                                        <v-btn color="success" v-if="!sale.is_activated" @click="activateSale(sale)">
-                                            Активировать
-                                        </v-btn>
+                                        <ul style="list-style: none; display: flex; flex-direction: column; row-gap: 15px;">
+                                            <li>
+                                                <v-btn
+                                                    color="success"
+                                                    v-if="sale.is_activated && sale.is_active"
+                                                    @click="currentSale = sale; clientWriteoffModalShow = true;"
+                                                >
+                                                    Списать <v-icon>mdi-check</v-icon>
+                                                </v-btn>
+                                            </li>
+                                            <li>
+                                                <v-btn
+                                                    color="blue darken-2"
+                                                    v-if="sale.is_active"
+                                                    @click="currentSale = sale; showClientSaleEditModal = true;"
+                                                >
+                                                    Редактировать <v-icon>mdi-pencil</v-icon>
+                                                </v-btn>
+                                            </li>
+                                            <li>
+                                                <v-btn
+                                                    @click="cancelSubscription(sale.id)"
+                                                    v-if="sale.is_activated && sale.is_active"
+                                                    color="error"
+                                                >
+                                                    Отменить продажу <v-icon>mdi-cancel</v-icon>
+                                                </v-btn>
+                                            </li>
+                                            <li>
+                                                <v-btn color="success" v-if="!sale.is_activated" @click="activateSale(sale)">
+                                                    Активировать <v-icon>mdi-check</v-icon>
+                                                </v-btn>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </v-expansion-panel-content>
@@ -79,17 +103,24 @@
             @cancel="clientWriteoffModalShow = false; currentSale = {};"
             :state="clientWriteoffModalShow"
             :sale="currentSale"/>
+        <EditClientSaleModal
+            :state="showClientSaleEditModal"
+            :sale="currentSale"
+            @cancel="showClientSaleEditModal = false; currentSale = {};"
+        />
     </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from 'vuex';
 import ClientWriteOffVisitModal from '@/components/Client/ClientWriteOffVisitModal';
+import EditClientSaleModal from '@/components/Client/EditClientSaleModal';
 
 export default {
-    components: {ClientWriteOffVisitModal},
+    components: {EditClientSaleModal, ClientWriteOffVisitModal},
     data: () => ({
         clientWriteoffModalShow: false,
+        showClientSaleEditModal: false,
         currentSale: {},
     }),
     computed: {
@@ -99,13 +130,23 @@ export default {
     },
     methods: {
         ...mapActions({
-            $activateSale: 'activateSale'
+            $activateSale: 'activateSale',
+            $cancelSubscription: 'cancelSubscription',
         }),
         async activateSale (sale) {
             this.$loading.enable();
             await this.$activateSale(sale);
             this.$toast.success('Абонемент успешно активирован!')
             this.$loading.disable();
+        },
+        async cancelSubscription (sale) {
+            this.$confirm('Вы действительно хотите отменить выбранный абонемент?')
+                .then(async () => {
+                    this.$loading.enable();
+                    this.$cancelSubscription(sale);
+                    this.$toast.success('Абонемент успешно отменен!');
+                    this.$loading.disable();
+                })
         }
     }
 }

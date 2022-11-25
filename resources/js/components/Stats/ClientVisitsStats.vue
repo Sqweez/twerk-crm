@@ -1,5 +1,20 @@
 <template>
     <div>
+        <v-alert
+            class="my-3"
+            color="indigo"
+            dark
+        >
+            <ul>
+                <li>
+                    Количество посещений: {{ visitsCount }}
+                </li>
+                <li>
+                    Количество уникальных клиентов: {{ clientsCount }}
+                </li>
+            </ul>
+
+        </v-alert>
         <v-text-field
             label="Поиск"
             v-model="search"
@@ -23,6 +38,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 export default {
     data: () => ({
         search: '',
@@ -53,6 +69,12 @@ export default {
         reports () {
             return this.$store.getters.client_visits;
         },
+        visitsCount () {
+            return this.reports.length;
+        },
+        clientsCount () {
+            return _.uniqBy(this.reports, 'client_id').length;
+        }
     },
     methods: {}
 }

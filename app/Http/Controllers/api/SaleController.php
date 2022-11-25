@@ -7,7 +7,9 @@ use App\Http\Requests\Sale\CreateSaleRequest;
 use App\Http\Resources\Client\ClientPurchasedServices;
 use App\Http\Resources\Clients\SingleClientResource;
 use App\Models\Sale;
+use App\Models\Visit;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SaleController extends Controller
 {
@@ -38,6 +40,18 @@ class SaleController extends Controller
             'client_id' => $sale->client_id,
             'subscription_id' => $sale->subscription_id,
         ]);
+        $sale->fresh();
+        return ClientPurchasedServices::make($sale);
+    }
+
+    public function cancelSale(Sale $sale): Response {
+        Visit::query()->whereSaleId($sale->id)->delete();
+        $sale->delete();
+        return response()->noContent();
+    }
+
+    public function updateSale(Sale $sale, Request $request): ClientPurchasedServices {
+        $sale->update($request->all());
         $sale->fresh();
         return ClientPurchasedServices::make($sale);
     }

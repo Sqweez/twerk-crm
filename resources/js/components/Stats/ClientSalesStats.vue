@@ -5,6 +5,21 @@
             v-model="search"
             append-icon="search"
         />
+        <v-alert
+            class="my-3"
+            color="indigo"
+            dark
+        >
+            <ul>
+                <li>
+                    Общая сумма: {{ totalAmount | priceFilters }}
+                </li>
+                <li>
+                    Количество абонементов: {{ reports.length }}
+                </li>
+            </ul>
+
+        </v-alert>
         <v-data-table
             :search="search"
             :items="reports"
@@ -67,6 +82,11 @@ export default {
         reports () {
             return this.$store.getters.sales;
         },
+        totalAmount () {
+            return this.reports.reduce((a, c) => {
+                return a + c.subscription.price;
+            }, 0);
+        }
     },
     methods: {}
 }
