@@ -2,13 +2,11 @@
 
 namespace App\Http\Resources\Economy;
 
-use App\Models\Visit;
+use App\Models\Sale;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/* @mixin Visit */
-
-class ClientVisitsResource extends JsonResource
+class TrainerStatsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,11 +19,11 @@ class ClientVisitsResource extends JsonResource
         return [
             'id' => $this->id,
             'client' => $this->client,
-            'client_id' => $this->client_id,
             'trainer' => $this->trainer,
             'subscription' => $this->subscription,
-            'user' => $this->user,
             'date' => Carbon::parse($this->created_at)->format('d.m.Y H:i:s'),
+            'user' => $this->user,
+            'payment_type' => collect(Sale::PAYMENT_TYPES)->where('id', $this->payment_type)->first()['name'],
         ];
     }
 }

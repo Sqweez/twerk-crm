@@ -5,10 +5,12 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Economy\ClientVisitsResource;
 use App\Http\Resources\Economy\SaleListResource;
+use App\Http\Resources\Economy\TrainerStatsResource;
 use App\Models\Sale;
 use App\Models\Visit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class EconomyController extends Controller
 {
@@ -23,12 +25,13 @@ class EconomyController extends Controller
             'reports' => [
                 'client_visits' => $this->getClientVisits(),
                 'sales' => $this->getSales(),
-                'trainer_visits' => $this->getTrainerVisits()
+                'trainer_sales' => $this->getTrainerSales(),
+                'trainer_visits' => $this->getTrainerVisits(),
             ]
         ]);
     }
 
-    private function getClientVisits() {
+    private function getClientVisits(): AnonymousResourceCollection {
         $visits = Visit::query()
             ->whereDate('created_at', '>=', $this->start)
             ->whereDate('created_at', '<=', $this->finish)
@@ -40,7 +43,7 @@ class EconomyController extends Controller
         return ClientVisitsResource::collection($visits);
     }
 
-    private function getSales(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection {
+    private function getSales(): AnonymousResourceCollection {
         $sales = Sale::query()
             ->whereDate('created_at', '>=', $this->start)
             ->whereDate('created_at', '<=', $this->finish)
@@ -53,14 +56,30 @@ class EconomyController extends Controller
         return SaleListResource::collection($sales);
     }
 
-    private function getTrainerVisits() {
+    private function getTrainerSales(): AnonymousResourceCollection {
+        $sales = Sale::query()
+            ->whereDate('created_at', '>=', $this->start)
+            ->whereDate('created_at', '<=', $this->finish)
+            ->with('subscription')
+            ->with('client')
+            ->has('trainer')
+            ->with('trainer')
+            ->with('user')
+            ->get();
+
+        return TrainerStatsResource::collection($sales);
+    }
+
+    public function getTrainerVisits(): AnonymousResourceCollection {
         $visits = Visit::query()
             ->whereDate('created_at', '>=', $this->start)
             ->whereDate('created_at', '<=', $this->finish)
             ->with('subscription')
             ->with('client')
+            ->has('trainer')
             ->with('trainer')
             ->get();
-        /* */
+
+        return ClientVisitsResource::collection($visits);
     }
 }

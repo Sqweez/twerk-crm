@@ -67,6 +67,10 @@ class Sale extends Model
             'id' => 3,
             'name' => 'Карта'
         ],
+        [
+            'id' => 4,
+            'name' => 'Онлайн'
+        ]
     ];
 
     public function client(): BelongsTo {
@@ -101,7 +105,8 @@ class Sale extends Model
     }
 
     public function getIsExpiredAttribute(): bool {
-        return $this->getIsActivatedAttribute() && !Carbon::parse($this->active_until)->greaterThanOrEqualTo(now());
+        return $this->getIsActivatedAttribute()
+            && !now()->lessThanOrEqualTo(Carbon::parse($this->active_until));
     }
 
     public function getIsActiveAttribute(): bool {

@@ -55,6 +55,16 @@
                                                 </v-list-item-subtitle>
                                             </v-list-item-content>
                                         </v-list-item>
+                                        <v-list-item>
+                                            <v-list-item-content>
+                                                <v-list-item-title>
+                                                    {{ sale.sale_date }}
+                                                </v-list-item-title>
+                                                <v-list-item-subtitle>
+                                                    Дата покупки
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list-item>
                                     </v-list>
                                     <div class="ml-12 pt-4">
                                         <ul style="list-style: none; display: flex; flex-direction: column; row-gap: 15px;">
@@ -70,7 +80,6 @@
                                             <li>
                                                 <v-btn
                                                     color="blue darken-2"
-                                                    v-if="sale.is_active"
                                                     @click="currentSale = sale; showClientSaleEditModal = true;"
                                                 >
                                                     Редактировать <v-icon>mdi-pencil</v-icon>

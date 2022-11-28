@@ -10,6 +10,7 @@ export default {
         client_visits: s => s.client_visits,
         sales: s => s.sales,
         trainer_visits: s => s.trainer_visits,
+        trainer_sales: s => s.trainer_sales,
     },
     mutations: {
         setReports ( state, reports ) {
@@ -17,6 +18,7 @@ export default {
             state.client_visits = reports.client_visits;
             state.sales = reports.sales;
             state.trainer_visits = reports.trainer_visits;
+            state.trainer_sales = reports.trainer_sales;
         }
     },
     actions: {

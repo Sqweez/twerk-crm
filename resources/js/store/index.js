@@ -59,6 +59,7 @@ const store = new Store({
     actions: {
         async INIT ({ dispatch }) {
             await Promise.all([
+                dispatch('getUsers'),
                 dispatch('getSubscriptionTypes'),
                 dispatch('getRoles'),
                 dispatch('getPaymentTypes')

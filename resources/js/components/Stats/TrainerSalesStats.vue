@@ -26,12 +26,13 @@
         >
             <ul>
                 <li>
-                    Количество посещений: {{ visitsCount }}
+                    Общая сумма: {{ totalAmount | priceFilters }}
                 </li>
                 <li>
-                    Количество уникальных клиентов: {{ clientsCount }}
+                    Количество абонементов: {{ reports.length }}
                 </li>
             </ul>
+
         </v-alert>
         <v-data-table
             :search="search"
@@ -57,8 +58,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
-
 export default {
     data: () => ({
         trainerId: -1,
@@ -70,8 +69,12 @@ export default {
                 text: 'Клиент'
             },
             {
-                value: 'subscription.name',
+                value: 'subscription',
                 text: 'Абонемент'
+            },
+            {
+                value: 'price',
+                text: 'Стоимость'
             },
             {
                 value: 'trainer.name',
@@ -79,7 +82,11 @@ export default {
             },
             {
                 value: 'user.name',
-                text: 'Кто списал'
+                text: 'Кто продал'
+            },
+            {
+                value: 'payment_type',
+                text: 'Способ оплаты'
             },
             {
                 value: 'date',
@@ -109,16 +116,15 @@ export default {
         reports () {
             return this.$store
                 .getters
-                .trainer_visits
+                .trainer_sales
                 .filter(t => {
                     return this.typeId === -1 ? true : t.subscription.type_id === this.typeId;
                 });
         },
-        visitsCount () {
-            return this.reports.length;
-        },
-        clientsCount () {
-            return _.uniqBy(this.reports, 'client_id').length;
+        totalAmount () {
+            return this.reports.reduce((a, c) => {
+                return a + c.subscription.price;
+            }, 0);
         }
     },
     methods: {}

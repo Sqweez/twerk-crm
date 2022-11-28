@@ -13,6 +13,7 @@
                 item-text="name"
                 item-value="id"
             />
+            <h6>Способ оплаты:</h6>
             <v-radio-group
                 v-model="sale.payment_type"
                 v-for="type of payment_types"

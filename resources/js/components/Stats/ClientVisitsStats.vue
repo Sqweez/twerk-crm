@@ -13,7 +13,6 @@
                     Количество уникальных клиентов: {{ clientsCount }}
                 </li>
             </ul>
-
         </v-alert>
         <v-text-field
             label="Поиск"

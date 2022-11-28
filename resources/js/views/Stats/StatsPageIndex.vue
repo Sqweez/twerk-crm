@@ -11,7 +11,10 @@
                             Продажи
                         </v-tab>
                         <v-tab>
-                            Тренера
+                            Продажи тренеров
+                        </v-tab>
+                        <v-tab>
+                            Посещения тренеров
                         </v-tab>
                     </v-tabs>
                 </v-col>
@@ -81,6 +84,9 @@
                     <client-sales-stats />
                 </v-tab-item>
                 <v-tab-item>
+                    <trainer-sales-stats />
+                </v-tab-item>
+                <v-tab-item>
                     <trainer-visits-stats />
                 </v-tab-item>
             </v-tabs-items>
@@ -94,6 +100,7 @@ import {mapActions} from 'vuex';
 import ClientVisitsStats from '@/components/Stats/ClientVisitsStats';
 import ClientSalesStats from '@/components/Stats/ClientSalesStats';
 import TrainerVisitsStats from '@/components/Stats/TrainerVisitsStats';
+import TrainerSalesStats from '@/components/Stats/TrainerSalesStats';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -105,7 +112,7 @@ const DATE_FILTERS = {
     LAST_3_DAYS: 5,
 };
 export default {
-    components: {TrainerVisitsStats, ClientSalesStats, ClientVisitsStats},
+    components: {TrainerSalesStats, TrainerVisitsStats, ClientSalesStats, ClientVisitsStats},
     data: () => ({
         tab: null,
         currentDate:  [
