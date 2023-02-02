@@ -41,6 +41,13 @@ class Client extends Model implements HasMedia
 
     protected $guarded = ['id'];
 
+    protected static function boot() {
+        parent::boot();
+        static::addGlobalScope('order', function ($builder) {
+            $builder->orderBy('name', 'asc');
+        });
+    }
+
     public function user(): BelongsTo {
         return $this->belongsTo(User::class)->withDefault([
             'id' => -1,

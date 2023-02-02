@@ -1,10 +1,5 @@
 <template>
     <div>
-        <v-text-field
-            label="Поиск"
-            v-model="search"
-            append-icon="search"
-        />
         <v-alert
             class="my-3"
             color="indigo"
@@ -19,6 +14,11 @@
                 </li>
             </ul>
         </v-alert>
+        <v-text-field
+            label="Поиск"
+            v-model="search"
+            append-icon="search"
+        />
         <v-data-table
             :search="search"
             :items="reports"
@@ -43,8 +43,11 @@
 </template>
 
 <script>
+import axiosClient from '@/utils/axiosClient';
+
 export default {
     data: () => ({
+        reports: [],
         search: '',
         headers: [
             {
@@ -60,8 +63,12 @@ export default {
                 text: 'Стоимость'
             },
             {
-                value: 'trainer.name',
-                text: 'Тренер'
+                value: 'active_until',
+                text: 'Активен до'
+            },
+            {
+                value: 'visits_remaining',
+                text: 'Осталось посещений'
             },
             {
                 value: 'user.name',
@@ -77,17 +84,26 @@ export default {
             }
         ]
     }),
+    async mounted () {
+        this.$loading.enable();
+        const { data: { data } } = await axiosClient.get(`users/${this.userId}/subscriptions`);
+        this.reports = data;
+        this.$loading.disable();
+    },
     computed: {
-        reports () {
-            return this.$store.getters.sales;
-        },
         totalAmount () {
             return this.reports.reduce((a, c) => {
-                return a + c.subscription.price;
+                return a + c.price;
             }, 0);
         }
     },
-    methods: {}
+    methods: {},
+    props: {
+        userId: {
+            type: Number|String,
+            required: true
+        }
+    }
 }
 </script>
 

@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'getMe']);
     Route::apiResource('clients', ClientController::class);
     Route::get('users/roles', [UserController::class, 'getRoles']);
+    Route::get('users/{user}/subscriptions', [UserController::class, 'getActiveSubscriptions']);
     Route::apiResource('users', UserController::class);
     Route::get('subscriptions/types', [SubscriptionController::class, 'getSubscriptionTypes']);
     Route::apiResource('subscriptions', SubscriptionController::class);

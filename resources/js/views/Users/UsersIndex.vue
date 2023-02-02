@@ -30,6 +30,9 @@
                             <v-btn icon @click="confirmationModal = true; userId = item.id;" v-if="$auth.id !== item.id">
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>
+                            <v-btn icon @click="$router.push(`users/${item.id}`)">
+                                <v-icon>mdi-eye</v-icon>
+                            </v-btn>
                         </template>
                     </v-data-table>
                 </v-col>

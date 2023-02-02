@@ -113,4 +113,8 @@ class Sale extends Model
         return $this->getVisitsRemainingAttribute() > 0
             && !$this->getIsExpiredAttribute();
     }
+
+    public function getPaymentTypeNameAttribute(): string {
+        return collect(self::PAYMENT_TYPES)->where('id', $this->payment_type)->first()['name'];
+    }
 }

@@ -7,6 +7,7 @@ import SubscriptionCreate from '@/views/Subscriptions/SubscriptionCreate';
 import SubscriptionEdit from '@/views/Subscriptions/SubscriptionEdit';
 import ClientView from '@/views/Clients/ClientView';
 import StatsPageIndex from '@/views/Stats/StatsPageIndex';
+import UserShow from '@/views/Users/UserShow';
 
 const routes = [
     {
@@ -24,6 +25,10 @@ const routes = [
     {
         path: '/users',
         component: UsersIndex,
+    },
+    {
+        path: '/users/:id',
+        component: UserShow,
     },
     {
         path: '/subscriptions',

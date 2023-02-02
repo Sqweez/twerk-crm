@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserActiveSubscriptionsResource;
 use App\Http\Resources\Users\UsersResource;
 use App\Models\Role;
+use App\Models\Sale;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -49,5 +51,19 @@ class UserController extends Controller
         return UsersResource::make(
             $user
         );
+    }
+
+    public function getActiveSubscriptions(User $user): \Illuminate\Http\Resources\Json\AnonymousResourceCollection {
+        $subscriptions = Sale::query()
+            ->with(['subscription', 'subscription.type', 'visits', 'client', 'user'])
+            ->where('trainer_id', $user->id)
+            ->get()
+            ->filter(function (Sale $sale) {
+                return $sale->is_active;
+            })
+            ->sortBy('client.name')
+            ->values();
+
+        return UserActiveSubscriptionsResource::collection($subscriptions);
     }
 }
