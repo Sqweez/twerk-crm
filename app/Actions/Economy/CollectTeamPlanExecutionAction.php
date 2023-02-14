@@ -32,8 +32,12 @@ class CollectTeamPlanExecutionAction {
             $currentSales = $sales->where('trainer_id', $plan['user_id']);
             $plan['plans'] = collect($plan['plans'])->map(function ($currentPlan) use ($currentSales) {
                 $saleCountFact = $currentSales->where('hall_id', $currentPlan['hall_id'])->count();
+                $saleCountFactPercent = 0;
+                if ($currentPlan['sale_count'] !== 0) {
+                    $saleCountFactPercent = (100 * $saleCountFact) / $currentPlan['sale_count'];
+                }
                 $currentPlan['sale_count_fact'] = $saleCountFact;
-                $currentPlan['sale_count_fact_percent'] = number_format((100 * $saleCountFact) / $currentPlan['sale_count'], 2, '.');
+                $currentPlan['sale_count_fact_percent'] = number_format($saleCountFactPercent, 2);
                 return $currentPlan;
             });
             return $plan;
@@ -65,13 +69,20 @@ class CollectTeamPlanExecutionAction {
             $saleCountFact = $needlePlans->reduce(function ($a, $c) {
                 return $a + $c['sale_count_fact'];
             }, 0);
+
+            $saleCountPercent = 0;
+
+            if ($saleCountPlan !== 0) {
+                $saleCountPercent = (100 * $saleCountFact) / $saleCountPlan;
+            }
+
             $totalOutput[] = [
                 'user_name' => $hall['name'],
                 'user_id' => null,
                 'name' => $hall['name'],
                 'sale_count' => $saleCountPlan,
                 'sale_count_fact' => $saleCountFact,
-                'sale_count_fact_percent' => number_format((100 * $saleCountFact) / $saleCountPlan, 2)
+                'sale_count_fact_percent' => number_format($saleCountPercent, 2)
             ];
         }
 
@@ -83,6 +94,12 @@ class CollectTeamPlanExecutionAction {
             return $a + $c['sale_count_fact'];
         }, 0);
 
+        $saleCountFactPercent = 0;
+
+        if ($totalSaleCountPlan !== 0) {
+            $saleCountFactPercent = (100 * $totalSaleCountFact) / $totalSaleCountPlan;
+        }
+
         $totalPlanExecution = [
             'user_name' => 'ИТОГО',
             'user_id' => null,
@@ -90,7 +107,7 @@ class CollectTeamPlanExecutionAction {
             'hall_id' => null,
             'sale_count' => $totalSaleCountPlan,
             'sale_count_fact' => $totalSaleCountFact,
-            'sale_count_fact_percent' => number_format((100 * $totalSaleCountFact) / $totalSaleCountPlan, 2)
+            'sale_count_fact_percent' => number_format($saleCountFactPercent, 2)
         ];
 
         $totalOutput[] = $totalPlanExecution;

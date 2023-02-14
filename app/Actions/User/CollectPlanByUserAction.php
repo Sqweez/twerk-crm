@@ -25,8 +25,12 @@ class CollectPlanByUserAction {
         return $defaultPlan
             ->map(function ($plan) use ($mySales) {
                 $saleCountFact = $mySales->where('hall_id', $plan['hall_id'])->count();
+                $saleCountFactPercent = 0;
+                if ($plan['sale_count'] !== 0) {
+                    $saleCountFactPercent = (100 * $saleCountFact) / $plan['sale_count'];
+                }
                 $plan['sale_count_fact'] = $saleCountFact;
-                $plan['sale_count_fact_percent'] = number_format((100 * $saleCountFact) / $plan['sale_count'], 2, '.');
+                $plan['sale_count_fact_percent'] = number_format($saleCountFactPercent, 2);
                 return $plan;
             });
     }
