@@ -34,6 +34,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Sale[] $sales
  * @property-read int|null $sales_count
+ * @property string|null $pass
+ * @method static \Illuminate\Database\Eloquent\Builder|Client wherePass($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
+ * @property-read int|null $visits_count
  */
 class Client extends Model implements HasMedia
 {
@@ -51,7 +55,7 @@ class Client extends Model implements HasMedia
     public function user(): BelongsTo {
         return $this->belongsTo(User::class)->withDefault([
             'id' => -1,
-            'name' => 'Удаленный админ'
+            'name' => 'Удаленный сотрудник'
         ]);
     }
 
@@ -61,5 +65,9 @@ class Client extends Model implements HasMedia
 
     public function getFullnameAttribute(): string {
         return sprintf("%s %s", $this->attributes['name'], $this->attributes['surname']);
+    }
+
+    public function visits(): HasMany {
+        return $this->hasMany(Visit::class)->latest('created_at');
     }
 }

@@ -30,6 +30,8 @@ class ClientPurchasedServices extends JsonResource
             'current_trainer' => $this->trainer,
             'is_active' => $this->is_active,
             'sale_date' => format_datetime($this->created_at),
+            'hall' => $this->hall,
+            'time' => $this->time,
         ];
     }
 }

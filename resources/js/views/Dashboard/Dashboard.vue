@@ -1,8 +1,17 @@
 <template>
     <div>
         <v-row>
-            <v-col  sm="3" lg="3" md="3">
+            <v-col  sm="12" lg="3" md="3">
                 <WeatherWidget />
+            </v-col>
+            <v-col sm="12" lg="9" md="9" v-if="IS_TRAINER">
+                <self-motivation-widget />
+            </v-col>
+            <v-col sm="12" lg="12" md="12" v-if="IS_TRAINER">
+                <user-visits-widget />
+            </v-col>
+            <v-col sm="12" lg="12" md="12" v-if="IS_BOSS">
+                <team-motivation-widget />
             </v-col>
         </v-row>
     </div>
@@ -10,16 +19,18 @@
 
 <script>
 
-import axiosClient from "../../utils/axiosClient";
 import DashboardClientTable from "../../components/Widgets/DashboardClientTable";
 import WeatherWidget from '@/components/Widgets/WeatherWidget';
+import SelfMotivationWidget from '@/components/Widgets/SelfMotivationWidget';
+import UserVisitsWidget from '@/components/Widgets/UserVisitsWidget';
+import TeamMotivationWidget from '@/components/Widgets/TeamMotivationWidget';
 
 export default {
     data: () => ({
         items: ['Сегодня', 'Текущая неделя', 'Текущий месяц', 'Последние 3 месяца'],
         whatsappTemplate: '',
     }),
-    components: {WeatherWidget, DashboardClientTable},
+    components: {TeamMotivationWidget, UserVisitsWidget, SelfMotivationWidget, WeatherWidget, DashboardClientTable},
 }
 </script>
 

@@ -13,6 +13,20 @@
                 item-text="name"
                 item-value="id"
             />
+            <v-select
+                label="Зал"
+                v-model="sale.hall_id"
+                :items="halls"
+                item-value="id"
+                item-text="name"
+            />
+            <v-select
+                label="Время"
+                v-model="sale.time_id"
+                :items="subscriptionTimeTypes"
+                item-value="id"
+                item-text="name"
+            />
             <h6>Способ оплаты:</h6>
             <v-radio-group
                 v-model="sale.payment_type"
@@ -51,6 +65,8 @@ export default {
         sale: {
             trainer_id: -1,
             payment_type: 1,
+            time_id: 1,
+            hall_id: 1
         },
     }),
     methods: {
@@ -65,6 +81,8 @@ export default {
                 price: this.subscription.price,
                 payment_type: this.sale.payment_type,
                 validity_visits: this.subscription.validity_visits,
+                time_id: this.sale.time_id,
+                hall_id: this.sale.hall_id,
             };
             try {
                 this.$loading.enable();

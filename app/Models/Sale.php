@@ -47,6 +47,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int $visits_remaining
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
  * @property-read int|null $visits_count
+ * @property int $hall_id
+ * @property int $time_id
+ * @property-read string $payment_type_name
+ * @method static \Illuminate\Database\Eloquent\Builder|Sale whereHallId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sale whereTimeId($value)
+ * @property-read string $time
+ * @property-read \App\Models\Hall|null $hall
  */
 class Sale extends Model
 {
@@ -75,6 +82,10 @@ class Sale extends Model
 
     public function client(): BelongsTo {
         return $this->belongsTo(Client::class);
+    }
+
+    public function hall(): BelongsTo {
+        return $this->belongsTo(Hall::class);
     }
 
     public function subscription(): BelongsTo {
@@ -116,5 +127,9 @@ class Sale extends Model
 
     public function getPaymentTypeNameAttribute(): string {
         return collect(self::PAYMENT_TYPES)->where('id', $this->payment_type)->first()['name'];
+    }
+
+    public function getTimeAttribute(): string {
+        return Subscription::TIME_TYPES[$this->time_id];
     }
 }

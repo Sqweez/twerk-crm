@@ -29,6 +29,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Visit whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Visit whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Client $client
+ * @property-read \App\Models\Subscription $subscription
+ * @property-read \App\Models\User|null $trainer
+ * @property-read \App\Models\User $user
+ * @property-read \App\Models\Sale|null $sale
  */
 class Visit extends Model
 {
@@ -43,11 +48,13 @@ class Visit extends Model
     }
 
     public function user(): BelongsTo {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)
+            ->select(['id', 'name']);
     }
 
     public function trainer(): BelongsTo {
         return $this->belongsTo(User::class, 'trainer_id')
+            ->select(['id', 'name'])
             ->withDefault([
                 'id' => -1,
                 'name' => 'Не установлен'
@@ -56,5 +63,9 @@ class Visit extends Model
 
     public function subscription(): BelongsTo {
         return $this->belongsTo(Subscription::class);
+    }
+
+    public function sale(): BelongsTo {
+        return $this->belongsTo(Sale::class);
     }
 }

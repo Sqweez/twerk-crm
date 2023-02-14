@@ -31,12 +31,16 @@ class CreateSaleRequest extends FormRequest
             'user_id' => 'required',
             'payment_type' => 'required',
             'trainer_id' => 'sometimes',
+            'time_id' => 'required',
+            'hall_id' => 'required',
         ];
     }
 
     protected function prepareForValidation() {
         $this->merge([
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'time_id' => $this->time_id ?: 1,
+            'hall_id' => $this->hall_id ?: 1,
         ]);
     }
 }

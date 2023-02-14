@@ -31,6 +31,19 @@ class SubscriptionController extends Controller
         return $this->responseSuccess(SubscriptionType::query()->get());
     }
 
+    public function getSubscriptionTimesType(): JsonResponse {
+        return $this->responseSuccess(
+            collect(Subscription::TIME_TYPES)
+                ->map(function ($type, $key) {
+                    return [
+                        'name' => $type,
+                        'id' => $key
+                    ];
+                })
+                ->values()
+        );
+    }
+
     public function show(Subscription $subscription) {
         return SubscriptionResource::make($subscription);
     }

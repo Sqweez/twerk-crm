@@ -43,6 +43,14 @@ class Subscription extends Model
 
     protected $guarded = ['id'];
 
+    const TIME_TYPES = [
+        1 => 'Утро',
+        2 => 'Вечер'
+    ];
+
+    const TYPE_MORNING = 1;
+    const TYPE_EVENING = 2;
+
     public function type(): BelongsTo {
         return $this->belongsTo(SubscriptionType::class, 'type_id');
     }

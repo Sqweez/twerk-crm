@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\api\ClientController;
 use App\Http\Controllers\api\EconomyController;
+use App\Http\Controllers\api\HallController;
+use App\Http\Controllers\api\PlanController;
 use App\Http\Controllers\api\SaleController;
 use App\Http\Controllers\api\SettingsController;
 use App\Http\Controllers\api\SubscriptionController;
@@ -27,11 +29,13 @@ Route::get('clients/cron/expired', [ClientController::class, 'cronExpiredClients
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'getMe']);
+    Route::get('clients/subscriptions/expiring', [ClientController::class, 'getExpiringSubscriptions']);
     Route::apiResource('clients', ClientController::class);
     Route::get('users/roles', [UserController::class, 'getRoles']);
     Route::get('users/{user}/subscriptions', [UserController::class, 'getActiveSubscriptions']);
     Route::apiResource('users', UserController::class);
     Route::get('subscriptions/types', [SubscriptionController::class, 'getSubscriptionTypes']);
+    Route::get('subscriptions/types/time', [SubscriptionController::class, 'getSubscriptionTimesType']);
     Route::apiResource('subscriptions', SubscriptionController::class);
     Route::get('sales/payment-types', [SaleController::class, 'getPaymentTypes']);
     Route::post('sales/{sale}/activate', [SaleController::class, 'activateSale']);
@@ -40,4 +44,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('sales/{sale}/update', [SaleController::class, 'updateSale']);
     Route::post('sales', [SaleController::class, 'store']);
     Route::get('economy', [EconomyController::class, 'index']);
+    Route::get('economy/trainer/visits', [EconomyController::class, 'getTrainerVisits']);
+    Route::get('economy/plan/total/{date}', [EconomyController::class, 'getEconomyPlanTotal']);
+    Route::get('economy/plan/{user}/{date}', [EconomyController::class, 'getEconomyPlanByUser']);
+    Route::get('halls', [HallController::class, 'index']);
+    Route::get('plan', [PlanController::class, 'index']);
+    Route::post('plan', [PlanController::class, 'store']);
 });

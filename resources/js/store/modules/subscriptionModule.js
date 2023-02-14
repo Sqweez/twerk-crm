@@ -4,10 +4,14 @@ export default {
     state: {
         subscriptions: [],
         subscription_types: [],
+        halls: [],
+        subscription_time_types: [],
     },
     getters: {
         subscriptions: state => state.subscriptions,
         subscription_types: state => state.subscription_types,
+        halls: state => state.halls,
+        subscription_time_types: state => state.subscription_time_types,
     },
     mutations: {
         setSubscriptionTypes (state, types) {
@@ -18,6 +22,12 @@ export default {
         },
         deleteSubscription (state, id) {
             state.subscriptions = state.subscriptions.filter(s => s.id !== id);
+        },
+        setHalls (state, payload) {
+            state.halls = payload;
+        },
+        setSubscriptionTimeTypes (state, payload) {
+            state.subscription_time_types = payload;
         }
     },
     actions: {
@@ -32,6 +42,14 @@ export default {
         async deleteSubscription ({ commit }, id) {
             await axiosClient.delete(`/subscriptions/${id}`);
             commit('deleteSubscription', id);
-        }
+        },
+        async getHalls ({ commit }) {
+            const { data: { data } } = await axiosClient.get(`/halls`);
+            commit('setHalls', data);
+        },
+        async getSubscriptionTimeTypes ({ commit }) {
+            const { data: { data } } = await axiosClient.get(`/subscriptions/types/time`);
+            commit('setSubscriptionTimeTypes', data);
+        },
     }
 }

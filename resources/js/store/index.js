@@ -22,6 +22,11 @@ const store = new Store({
                 icon: 'dashboard',
             },
             {
+                title: 'План продаж',
+                url: '/plan',
+                icon: 'dashboard'
+            },
+            {
                 title: 'Клиенты',
                 url: '/clients',
                 icon: 'person'
@@ -39,6 +44,11 @@ const store = new Store({
             {
                 title: 'Статистика',
                 url: '/economy',
+                icon: 'list'
+            },
+            {
+                title: 'Истекающие абонеметы',
+                url: '/subscriptions/almost/expired',
                 icon: 'list'
             },
            /* {
@@ -62,7 +72,9 @@ const store = new Store({
                 dispatch('getUsers'),
                 dispatch('getSubscriptionTypes'),
                 dispatch('getRoles'),
-                dispatch('getPaymentTypes')
+                dispatch('getPaymentTypes'),
+                dispatch('getHalls'),
+                dispatch('getSubscriptionTimeTypes'),
             ]);
         }
     },

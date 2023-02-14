@@ -26,6 +26,7 @@ class ClientVisitsResource extends JsonResource
             'subscription' => $this->subscription,
             'user' => $this->user,
             'date' => Carbon::parse($this->created_at)->format('d.m.Y H:i:s'),
+            'hall' => sprintf("%s (%s)", $this->sale->hall->name, $this->sale->time),
         ];
     }
 }

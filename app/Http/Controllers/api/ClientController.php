@@ -5,9 +5,12 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\CreateClientRequest;
 use App\Http\Requests\Client\UpdateClientRequest;
+use App\Http\Resources\Client\ClientExpiringSubscriptions;
 use App\Http\Resources\Clients\ClientsResource;
 use App\Http\Resources\Clients\SingleClientResource;
 use App\Models\Client;
+use App\Models\Sale;
+use App\Repositories\RetrieveSingleClient;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Arr;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -37,12 +40,26 @@ class ClientController extends Controller
         return ClientsResource::make($client);
     }
 
-    public function show(Client $client) {
-        $client->load('sales');
-        $client->load('sales.subscription');
-        $client->load('sales.subscription.type');
-        $client->load('sales.visits');
-        return SingleClientResource::make($client);
+    public function getExpiringSubscriptions() {
+        $sales = Sale::query()
+            ->with('client')
+            ->with('subscription')
+            ->with('visits')
+            ->with('hall')
+            ->whereDate('active_until', '>', today()->subDay())
+            ->get()
+            ->filter(function (Sale $sale) {
+                return $sale->visits_remaining > 0 && $sale->visits_remaining <= 2;
+            })
+            ->values();
+
+        return ClientExpiringSubscriptions::collection($sales);
+    }
+
+    public function show(Client $client): SingleClientResource {
+        return SingleClientResource::make(
+            RetrieveSingleClient::retrieve($client)
+        );
     }
 
     /**

@@ -49,6 +49,7 @@
                 <i-card-page title="Рабочее пространство" v-if="isClientReady">
                     <client-purchased-subscriptions />
                     <client-price-list/>
+                    <client-visits-history />
                 </i-card-page>
             </v-col>
         </v-row>
@@ -59,9 +60,10 @@
 import {mapGetters} from 'vuex';
 import ClientPriceList from '@/components/Client/ClientPriceList';
 import ClientPurchasedSubscriptions from '@/components/Client/ClientPurchasedSubscriptions';
+import ClientVisitsHistory from '@/components/Client/ClientVisitsHistory';
 
 export default {
-    components: {ClientPurchasedSubscriptions, ClientPriceList},
+    components: {ClientVisitsHistory, ClientPurchasedSubscriptions, ClientPriceList},
     data: () => ({}),
     computed: {
         ...mapGetters({
