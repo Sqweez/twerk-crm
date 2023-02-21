@@ -10,6 +10,13 @@ export default {
     getters: {
         subscriptions: state => state.subscriptions,
         subscription_types: state => state.subscription_types,
+        subscription_type_filters: state => [
+            {
+                id: -1,
+                name: 'Все'
+            },
+            ...state.subscription_types
+        ],
         halls: state => state.halls,
         subscription_time_types: state => state.subscription_time_types,
     },

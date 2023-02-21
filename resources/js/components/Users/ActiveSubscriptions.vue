@@ -14,6 +14,13 @@
                 </li>
             </ul>
         </v-alert>
+        <v-select
+            label="Фильтр по типу абонемента"
+            :items="subscriptionTypeFilter"
+            v-model="subscriptionTypeId"
+            item-text="name"
+            item-value="id"
+        />
         <v-text-field
             label="Поиск"
             v-model="search"
@@ -21,7 +28,7 @@
         />
         <v-data-table
             :search="search"
-            :items="reports"
+            :items="filteredItems"
             :headers="headers"
         >
             <template v-slot:item.subscription="{item}">
@@ -48,6 +55,7 @@ import axiosClient from '@/utils/axiosClient';
 export default {
     data: () => ({
         reports: [],
+        subscriptionTypeId: -1,
         search: '',
         headers: [
             {
@@ -95,6 +103,14 @@ export default {
             return this.reports.reduce((a, c) => {
                 return a + c.price;
             }, 0);
+        },
+        filteredItems () {
+            return this.reports.filter(r => {
+                return this.subscriptionTypeId === -1 ? true : r.subscription_type_id === this.subscriptionTypeId;
+            })
+        },
+        subscriptionTypeFilter () {
+            return this.$store.getters.subscription_type_filters;
         }
     },
     methods: {},

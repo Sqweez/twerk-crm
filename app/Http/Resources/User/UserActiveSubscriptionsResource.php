@@ -20,6 +20,7 @@ class UserActiveSubscriptionsResource extends JsonResource
         return [
             'id' => $this->id,
             'subscription_name' => $this->subscription->name,
+            'subscription_type_id' => $this->subscription->type_id,
             'subscription_type' => $this->subscription->type->name,
             'active_until' => $this->active_until ? Carbon::parse($this->active_until)->format('d.m.Y') : null,
             'is_activated' => $this->is_activated,
