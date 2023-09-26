@@ -33,8 +33,12 @@ export default {
                 text: 'Абонемент'
             },
             {
-                value: 'hall',
-                text: 'Зал'
+                value: 'active_until',
+                text: 'Активен до'
+            },
+            {
+                value: 'visits_remaining',
+                text: 'Осталось посещений'
             },
             {
                 value: 'current_trainer.name',
