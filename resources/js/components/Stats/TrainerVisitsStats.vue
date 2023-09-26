@@ -52,12 +52,18 @@
                     <v-icon>mdi-eye</v-icon>
                 </v-btn>
             </template>
+            <template v-slot:item.actions="{ item }">
+                <v-btn color="success" icon @click="openWA(item)">
+                    <v-icon>mdi-whatsapp</v-icon>
+                </v-btn>
+            </template>
         </v-data-table>
     </div>
 </template>
 
 <script>
 import _ from 'lodash';
+import {openWA} from '@/utils/helpers';
 
 export default {
     data: () => ({
@@ -84,6 +90,10 @@ export default {
             {
                 value: 'date',
                 text: 'Дата'
+            },
+            {
+                value: 'actions',
+                text: 'Действие'
             }
         ]
     }),
@@ -121,7 +131,12 @@ export default {
             return _.uniqBy(this.reports, 'client_id').length;
         }
     },
-    methods: {}
+    methods: {
+        openWA (item) {
+            console.log(item);
+            openWA(item.phone)
+        }
+    }
 }
 </script>
 

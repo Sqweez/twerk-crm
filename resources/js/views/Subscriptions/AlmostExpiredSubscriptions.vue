@@ -18,6 +18,7 @@
 
 <script>
 import axiosClient from '@/utils/axiosClient';
+import {openWA} from '@/utils/helpers';
 
 export default {
     data: () => ({
@@ -58,10 +59,7 @@ export default {
             this.$loading.disable();
         },
         openWA (item) {
-            const link = document.createElement('a');
-            link.href = `https://api.whatsapp.com/send?phone=${item.client_phone}`;
-            link.target = '_blank';
-            link.click();
+            openWA(item.client_phone)
         }
     },
     async mounted() {

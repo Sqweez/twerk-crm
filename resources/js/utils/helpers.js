@@ -25,6 +25,13 @@ export function toFormData (payload) {
     return formData;
 }
 
+export function openWA (phone) {
+    const link = document.createElement('a');
+    link.href = `https://api.whatsapp.com/send?phone=${phone}`;
+    link.target = '_blank';
+    link.click();
+}
+
 export function reverseDate (date) {
     return date
         .split('.')

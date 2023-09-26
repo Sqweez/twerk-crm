@@ -53,11 +53,18 @@
                     <v-icon>mdi-eye</v-icon>
                 </v-btn>
             </template>
+            <template v-slot:item.actions="{ item }">
+                <v-btn color="success" icon @click="openWA(item)">
+                    <v-icon>mdi-whatsapp</v-icon>
+                </v-btn>
+            </template>
         </v-data-table>
     </div>
 </template>
 
 <script>
+import {openWA} from '@/utils/helpers';
+
 export default {
     data: () => ({
         trainerId: -1,
@@ -91,6 +98,10 @@ export default {
             {
                 value: 'date',
                 text: 'Дата'
+            },
+            {
+                value: 'actions',
+                text: 'Действие'
             }
         ]
     }),
@@ -127,7 +138,11 @@ export default {
             }, 0);
         }
     },
-    methods: {}
+    methods: {
+        openWA (item) {
+            openWA(item.phone)
+        }
+    }
 }
 </script>
 

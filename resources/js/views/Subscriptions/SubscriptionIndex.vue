@@ -34,7 +34,8 @@
             :state="confirmationModal"
             :on-confirm="deleteSubscription"
             v-on:cancel="subscriptionId = null; confirmationModal = false"
-            message="Вы действительно хотите удалить выбранный абонемент?" />
+            message="Вы действительно хотите удалить выбранный абонемент?"
+        />
     </i-card-page>
 </template>
 

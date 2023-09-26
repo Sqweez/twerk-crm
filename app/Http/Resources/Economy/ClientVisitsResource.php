@@ -27,6 +27,7 @@ class ClientVisitsResource extends JsonResource
             'user' => $this->user,
             'date' => Carbon::parse($this->created_at)->format('d.m.Y H:i:s'),
             'hall' => sprintf("%s (%s)", $this->sale->hall->name, $this->sale->time),
+            'phone' => unmask_phone($this->client->phone),
         ];
     }
 }

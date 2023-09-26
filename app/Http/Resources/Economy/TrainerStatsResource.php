@@ -24,6 +24,7 @@ class TrainerStatsResource extends JsonResource
             'date' => Carbon::parse($this->created_at)->format('d.m.Y H:i:s'),
             'user' => $this->user,
             'payment_type' => collect(Sale::PAYMENT_TYPES)->where('id', $this->payment_type)->first()['name'],
+            'phone' => unmask_phone($this->client->phone),
         ];
     }
 }
